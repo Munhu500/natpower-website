@@ -1,77 +1,78 @@
 ---
 /**
- * Natpower Group logo lockup: mark + "NATPOWER" wordmark + "GROUP".
+ * Natpower Group logo: the approved full-colour mark, optionally with the
+ * "NATPOWER / GROUP" text wordmark beside it.
  *
- * TODO: replace with flat SVG mark. Pass it via the `mark` slot, or replace
- * the fallback below. The current logo is a bevelled 3D raster and is a
- * TEMPORARY placeholder only. To use it meanwhile, download it to
- * src/assets/logo-original.png (see README) and it is picked up automatically.
+ * The mark is the final, approved artwork. Use it as-is: never redraw,
+ * recolour or add effects to it.
  */
-import { ui } from '../data/site';
+import { Picture } from 'astro:assets';
+import logoMark from '../assets/natpower-logo.png';
+import { group, ui } from '../data/site';
 
 interface Props {
-  /** light = for dark backgrounds (ivory wordmark); dark = for light backgrounds */
+  /** light = wordmark for dark backgrounds; dark = wordmark for light backgrounds */
   variant?: 'light' | 'dark';
+  /** Rendered mark size in px (largest size it is shown at; CSS may shrink it). */
+  size?: number;
+  /** Show the "NATPOWER / GROUP" text wordmark beside the mark. */
+  wordmark?: boolean;
   href?: string | null;
+  loading?: 'eager' | 'lazy';
   class?: string;
 }
 
-const { variant = 'light', href = '/', class: className = '' } = Astro.props;
-
-// Optional local raster. Absent until someone downloads it.
-const rasters = import.meta.glob<{ default: ImageMetadata }>('../assets/logo-original.png', { eager: true });
-const raster = Object.values(rasters)[0]?.default;
+const {
+  variant = 'light',
+  size = 56,
+  wordmark = true,
+  href = '/',
+  loading = 'lazy',
+  class: className = '',
+} = Astro.props;
 
 const Wrapper = href ? 'a' : 'div';
 ---
 
 <Wrapper
   href={href ?? undefined}
-  class:list={['group/logo inline-flex items-center gap-3', className]}
+  class:list={['logo inline-flex items-center gap-3', className]}
+  style={`--logo-size:${size}px`}
 >
-  <span class="flex h-10 w-10 shrink-0 items-center justify-center md:h-12 md:w-12" aria-hidden="true">
-    <slot name="mark">
-      {
-        raster ? (
-          <img src={raster.src} alt="" width="48" height="48" class="max-h-12 w-auto object-contain" />
-        ) : (
-          /* TODO: replace with flat SVG mark */
-          <svg viewBox="0 0 48 48" class="h-full w-full" fill="none">
-            <rect
-              x="0.5"
-              y="0.5"
-              width="47"
-              height="47"
-              stroke="currentColor"
-              class={variant === 'light' ? 'text-ivory/60' : 'text-green-600/60'}
-            />
-            <path
-              d="M14 34V14h3.4l10.2 13.6V14H31v20h-3.2L17.4 20.3V34z"
-              class={variant === 'light' ? 'fill-ivory' : 'fill-green-600'}
-            />
-          </svg>
-        )
-      }
-    </slot>
-  </span>
-  <span class="flex flex-col leading-none">
-    <span
-      class:list={[
-        'font-display text-[19px] font-bold tracking-[0.14em] md:text-[21px]',
-        variant === 'light' ? 'text-ivory' : 'text-green-950',
-      ]}
-    >
-      NATPOWER
-    </span>
-    <span class="sr-only"> </span>
-    <span
-      class:list={[
-        'mt-1.5 font-sans text-[10px] font-medium tracking-[0.3em]',
-        variant === 'light' ? 'text-gold-300' : 'text-gold-700',
-      ]}
-    >
-      {ui.groupLabel}
-    </span>
-    {href && <span class="sr-only"> home</span>}
-  </span>
+  <Picture
+    src={logoMark}
+    formats={['avif', 'webp']}
+    width={size}
+    height={size}
+    densities={[1, 2]}
+    alt={wordmark ? '' : group.logo.alt}
+    loading={loading}
+    decoding="async"
+    class="logo-mark block shrink-0"
+  />
+  {
+    wordmark && (
+      <span class="flex flex-col leading-none">
+        <span
+          class:list={[
+            'font-display text-[19px] font-bold tracking-[0.14em] md:text-[21px]',
+            variant === 'light' ? 'text-ivory' : 'text-green-950',
+          ]}
+        >
+          NATPOWER
+        </span>
+        <span class="sr-only"> </span>
+        <span
+          class:list={[
+            'mt-1.5 font-sans text-[10px] font-medium tracking-[0.3em]',
+            variant === 'light' ? 'text-gold-300' : 'text-gold-700',
+          ]}
+        >
+          {ui.groupLabel}
+        </span>
+        {href && <span class="sr-only"> home</span>}
+      </span>
+    )
+  }
+  {!wordmark && href && <span class="sr-only">{group.logo.alt} home</span>}
 </Wrapper>

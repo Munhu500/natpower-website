@@ -94,6 +94,16 @@
 }
 
 @layer components {
+  /* Approved logo mark: size set per instance via --logo-size */
+  .logo-mark {
+    width: var(--logo-size, 56px);
+    height: var(--logo-size, 56px);
+    object-fit: contain;
+    transition:
+      width 250ms ease,
+      height 250ms ease;
+  }
+
   .container-site {
     width: 100%;
     max-width: 1320px;

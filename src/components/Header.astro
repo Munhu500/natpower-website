@@ -13,7 +13,7 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
   <div class="header-fade overlay-top pointer-events-none absolute inset-x-0 top-0 h-40" aria-hidden="true"></div>
 
   <div class="header-bar container-site relative flex items-center justify-between gap-6">
-    <Logo variant="light" />
+    <Logo variant="light" size={56} loading="eager" class="header-logo" />
 
     <nav aria-label="Main" class="hidden xl:block">
       <ul class="flex items-center gap-5 2xl:gap-8">
@@ -95,7 +95,7 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
     hidden
   >
     <div class="container-site flex h-[72px] shrink-0 items-center justify-between">
-      <Logo variant="light" />
+      <Logo variant="light" size={48} />
       <button type="button" class="inline-flex h-12 w-12 items-center justify-center text-ivory" data-menu-close>
         <Icon name="x" size={28} />
         <span class="sr-only">{ui.close}</span>
@@ -164,6 +164,18 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
   @media (min-width: 768px) {
     [data-scrolled='true'] .header-bar {
       height: var(--header-h-scrolled);
+    }
+  }
+
+  /* Logo mark: 48px on mobile and when scrolled, 56px over the hero */
+  :global(.header-logo .logo-mark) {
+    width: 48px;
+    height: 48px;
+  }
+  @media (min-width: 768px) {
+    :global(#site-header[data-scrolled='false'] .header-logo .logo-mark) {
+      width: 56px;
+      height: 56px;
     }
   }
 

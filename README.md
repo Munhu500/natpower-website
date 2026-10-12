@@ -28,18 +28,21 @@ src/
   pages/              index, about, operations, diversified-interests,
                       compliance, investors, news-media, contact, 404
   scripts/reveal.ts   Scroll-reveal observer
-  assets/             Logo and images (see below)
+  assets/             Approved logo (natpower-logo.png) and images
 ```
+
+## Logo
+
+The approved logo is `src/assets/natpower-logo.png` (transparent PNG). It is final: use it as-is and never redraw, recolour or add effects to it.
+
+- `Logo.astro` renders it with Astro `<Picture>` (AVIF and WebP, 1x and 2x, explicit width and height).
+- Sizes: header 56px (48px when scrolled and on mobile), mobile menu 48px, footer 64px, company cards and 404 72px.
+- `public/favicon-32.png` and `public/apple-touch-icon.png` (180px, on ivory because iOS renders transparency as black) are generated from it.
+- It is the default Open Graph image, output at 1024px by `BaseLayout.astro`.
 
 ## Placeholders that need real content
 
 Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
-
-### Brand
-- **Logo mark:** a flat SVG mark is needed. `Logo.astro` currently draws a neutral "N" square (`TODO: replace with flat SVG mark`).
-- **Temporary raster logo:** natpower.org was unreachable during the build. To use the raster meanwhile, run:
-  `curl -o src/assets/logo-original.png https://natpower.org/wp-content/uploads/2025/07/ChatGPT-Image-Jul-9-2025-12_16_37-PM.png`
-  `Logo.astro` picks it up automatically.
 
 ### Kempton Park office (Natpower (Pty) Ltd)
 - Street address, suburb and postal code

@@ -146,9 +146,7 @@ export const group = {
   experienceClaim: '35+ years of combined leadership experience',
   quoteHref: '/contact?enquiry=sales#enquiry',
   logo: {
-    /** TEMPORARY: original bevelled raster. Download to src/assets/logo-original.png. */
-    originalUrl: 'https://natpower.org/wp-content/uploads/2025/07/ChatGPT-Image-Jul-9-2025-12_16_37-PM.png',
-    alt: 'Natpower Group',
+    alt: 'Natpower Group logo',
   },
 } as const;
 

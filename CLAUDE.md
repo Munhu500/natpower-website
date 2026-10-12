@@ -9,7 +9,7 @@ Astro + Tailwind CSS v4 + TypeScript static site. **Layout only for now**: stati
 - Design tokens live in `src/styles/global.css` (`@theme`). The default Tailwind palette is removed on purpose: only brand tokens exist.
 - `gold-700` (`#86682B`) is an implementation-only, text-only token for small gold labels on light backgrounds. `gold-500` on ivory is 3.17:1 and fails WCAG AA for 12px text. Rules, underlines and icons still use `gold-500`.
 - Images: `Media.astro` renders a photo when `src` is set, otherwise a labelled stone placeholder.
-- Logo: `Logo.astro` (TODO: replace with flat SVG mark). It picks up `src/assets/logo-original.png` automatically if present.
+- Logo: the approved, final logo is `src/assets/natpower-logo.png`. Use it as-is; never redraw, recolour or add effects to it. `Logo.astro` renders it via Astro `<Picture>` (AVIF/WebP). Sizes: header 56px (48px scrolled and on mobile), footer 64px, company cards 72px. Favicons in `public/` are generated from it, and it is the default Open Graph image.
 
 ## Project context
 
@@ -131,10 +131,9 @@ All text must meet WCAG AA contrast. Gold is never used for body text.
 - **Icons:** Lucide, 1.5px stroke, 24px; gold-500 on light backgrounds, gold-300 on dark.
 
 ### Logo
-- The current logo is a bevelled 3D raster at https://natpower.org/wp-content/uploads/2025/07/ChatGPT-Image-Jul-9-2025-12_16_37-PM.png. Download it to `src/assets/logo-original.png`. It is a TEMPORARY placeholder.
-- Build a `Logo` component that accepts an SVG mark later. Leave a clearly marked `TODO: replace with flat SVG mark`.
+- The approved, final logo is `src/assets/natpower-logo.png` (transparent PNG). Use it as-is in full colour everywhere; do not redraw, recolour or add effects to it. (This supersedes the original brief's temporary raster and SVG-mark instructions.)
 - **Header and footer lockup:**
-  - The mark, max 48px tall, with no added effects.
+  - The mark at 56px in the header (48px when scrolled and on mobile) and 64px in the footer, with no added effects.
   - Beside it, a text wordmark: "NATPOWER" in Archivo 700 with 0.14em tracking.
   - Beneath that, "GROUP" in Inter 500, 10px, 0.3em tracking: gold-300 on dark backgrounds, gold-500 on light.
 - Provide a light-on-dark variant for the transparent header and the footer.
