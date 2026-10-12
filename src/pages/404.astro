@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { aboutPage, notFoundPage } from '../data/site';
+---
+
+<BaseLayout title={notFoundPage.heading}>
+  <PageHero eyebrow={notFoundPage.eyebrow} title={notFoundPage.heading} image={aboutPage.hero.image} />
+  <section class="section bg-ivory">
+    <div class="container-site">
+      <p class="prose-measure">{notFoundPage.text}</p>
+      <a href={notFoundPage.link.href} class="link-arrow mt-8">
+        {notFoundPage.link.label}
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,201 @@
+---
+import Media from './Media.astro';
+import Icon from './Icon.astro';
+import { heroSlides, ui } from '../data/site';
+
+const total = String(heroSlides.length).padStart(2, '0');
+---
+
+<section class="hero on-dark relative h-[100svh] min-h-[600px] overflow-hidden bg-green-950 text-ivory" aria-roledescription="carousel" aria-label="Highlights" data-hero>
+  {
+    heroSlides.map((slide, i) => (
+      <div
+        class:list={['hero-slide absolute inset-0', i === 0 && 'is-active']}
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${i + 1} of ${heroSlides.length}`}
+        aria-hidden={i === 0 ? undefined : 'true'}
+        data-slide
+      >
+        <div class="hero-media absolute inset-0">
+          <Media image={slide.image} tone="dark" loading={i === 0 ? 'eager' : 'lazy'} />
+        </div>
+        <div class="overlay-bottom absolute inset-0" aria-hidden="true" />
+        <div class="overlay-left absolute inset-0 opacity-70" aria-hidden="true" />
+
+        <div class="container-site relative flex h-full flex-col justify-end pb-36 md:pb-44">
+          <div class="hero-copy max-w-5xl">
+            {i === 0 ? (
+              <h1 class="text-hero">
+                <span class="block">{slide.lines[0]}</span>
+                <span class="block">{slide.lines[1]}</span>
+              </h1>
+            ) : (
+              <p class="text-hero font-display font-semibold uppercase tracking-[0.02em]">
+                <span class="block">{slide.lines[0]}</span>
+                <span class="block">{slide.lines[1]}</span>
+              </p>
+            )}
+            <a href={slide.href} class="link-arrow mt-10" tabindex={i === 0 ? undefined : -1}>
+              {slide.linkLabel}
+              <span class="sr-only">: {slide.lines.join(' ')}</span>
+              <Icon name="arrow-right" size={18} />
+            </a>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+
+  <!-- Controls -->
+  <div class="container-site absolute inset-x-0 bottom-0 pb-10 md:pb-14">
+    <div class="flex items-center gap-6 md:gap-10">
+      <p class="shrink-0 font-display text-[15px] font-semibold tracking-[0.12em] text-gold-300" aria-live="polite">
+        <span data-current>01</span> / {total}
+      </p>
+      <div class="relative h-px flex-1 bg-ivory/25 md:max-w-xs" aria-hidden="true">
+        <div class="hero-progress absolute inset-y-0 left-0 bg-gold-300" data-progress></div>
+      </div>
+      <div class="ml-auto flex gap-2">
+        <button type="button" class="hero-arrow" data-prev>
+          <Icon name="arrow-left" size={20} />
+          <span class="sr-only">{ui.previousSlide}</span>
+        </button>
+        <button type="button" class="hero-arrow" data-next>
+          <Icon name="arrow-right" size={20} />
+          <span class="sr-only">{ui.nextSlide}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-slide {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 1000ms ease,
+      visibility 0s linear 1000ms;
+  }
+  .hero-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Ken Burns: 1.0 → 1.06 over 8s */
+  .hero-media {
+    transform-origin: 60% 50%;
+  }
+  .hero-slide.is-active .hero-media {
+    animation: hero-kenburns 8000ms linear forwards;
+  }
+  .hero-slide.is-leaving .hero-media {
+    transform: scale(1.06);
+  }
+  @keyframes hero-kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.06);
+    }
+  }
+
+  /* Headline fade-up 600ms */
+  .hero-slide.is-active .hero-copy {
+    animation: hero-fade-up 600ms var(--ease-reveal) 200ms both;
+  }
+  @keyframes hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hero-progress {
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide.is-active .hero-media,
+    .hero-slide.is-active .hero-copy {
+      animation: none;
+    }
+    .hero-slide.is-leaving .hero-media {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const DURATION = 6000;
+  const root = document.querySelector<HTMLElement>('[data-hero]');
+  if (root) {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const current = root.querySelector<HTMLElement>('[data-current]')!;
+    const progress = root.querySelector<HTMLElement>('[data-progress]')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let hovering = false;
+    let anim: Animation | undefined;
+
+    // The progress line doubles as the auto-advance timer.
+    const run = () => {
+      anim?.cancel();
+      if (reduce) {
+        progress.style.transform = `scaleX(${(index + 1) / slides.length})`;
+        return;
+      }
+      anim = progress.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], {
+        duration: DURATION,
+        easing: 'linear',
+        fill: 'forwards',
+      });
+      anim.onfinish = () => go(index + 1);
+      if (hovering) anim.pause();
+    };
+
+    const go = (next: number) => {
+      const prev = slides[index];
+      index = (next + slides.length) % slides.length;
+      const slide = slides[index];
+      slides.forEach((s) => s.classList.remove('is-leaving'));
+      prev.classList.remove('is-active');
+      prev.classList.add('is-leaving');
+      prev.setAttribute('aria-hidden', 'true');
+      prev.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+      slide.classList.add('is-active');
+      slide.removeAttribute('aria-hidden');
+      slide.querySelectorAll('a').forEach((a) => a.removeAttribute('tabindex'));
+      current.textContent = String(index + 1).padStart(2, '0');
+      run();
+    };
+
+    const pause = () => {
+      hovering = true;
+      anim?.pause();
+    };
+    const resume = () => {
+      hovering = false;
+      if (anim?.playState === 'paused') anim.play();
+    };
+
+    root.querySelector('[data-next]')!.addEventListener('click', () => go(index + 1));
+    root.querySelector('[data-prev]')!.addEventListener('click', () => go(index - 1));
+    root.addEventListener('mouseenter', pause);
+    root.addEventListener('mouseleave', resume);
+    root.addEventListener('focusin', pause);
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) resume();
+    });
+
+    run();
+  }
+</script>

@@ -1,0 +1,284 @@
+---
+import { mapPins, operationsSection } from '../data/site';
+import { countries, mapBounds } from '../data/map';
+
+const { west, north, east, south, scale } = mapBounds;
+const width = (east - west) * scale;
+const height = (north - south) * scale;
+const project = (lon: number, lat: number): [number, number] => [
+  +((lon - west) * scale).toFixed(1),
+  +((north - lat) * scale).toFixed(1),
+];
+const toPoints = (pts: [number, number][]) => pts.map(([lon, lat]) => project(lon, lat).join(',')).join(' ');
+
+const pinById = new Map(mapPins.map((p) => [p.id, p]));
+const routes = operationsSection.corridorRoutes.map((ids) =>
+  ids.map((id) => {
+    const p = pinById.get(id)!;
+    return project(p.lon, p.lat).join(',');
+  }).join(' '),
+);
+
+// Small offsets so neighbouring pins (Rustenburg / Kempton Park, Copperbelt / Lubumbashi) don't overlap
+const pinOffsets: Record<number, [number, number]> = { 1: [-10, -6], 2: [10, 6], 5: [8, 8], 6: [-8, -8] };
+
+const countryLabels: { text: string; lon: number; lat: number }[] = [
+  { text: 'South Africa', lon: 22.6, lat: -30.6 },
+  { text: 'Namibia', lon: 17.2, lat: -20.4 },
+  { text: 'Zambia', lon: 24.6, lat: -15 },
+  { text: 'DRC', lon: 22.4, lat: -4.4 },
+  { text: 'Malawi', lon: 38.2, lat: -13.2 },
+];
+
+const firstTab = operationsSection.tabs[0];
+---
+
+<section id="operations" class="section bg-ivory" aria-labelledby="operations-heading">
+  <div class="container-site">
+    <div data-reveal>
+      <p class="eyebrow">{operationsSection.eyebrow}</p>
+      <h2 id="operations-heading" class="text-h2 mt-6 max-w-3xl">{operationsSection.heading}</h2>
+    </div>
+
+    <div class="mt-14 grid gap-14 lg:grid-cols-12 lg:gap-6" data-ops>
+      <!-- Tabs + lists -->
+      <div class="min-w-0 lg:col-span-5" data-reveal>
+        <div role="tablist" aria-label="Operations" class="-mx-5 flex gap-x-7 overflow-x-auto border-b border-stone px-5 sm:mx-0 sm:gap-x-8 sm:px-0">
+          {
+            operationsSection.tabs.map((tab, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`ops-tab-${tab.id}`}
+                aria-controls={`ops-panel-${tab.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="ops-tab -mb-px shrink-0 whitespace-nowrap border-b border-transparent pb-4 pt-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted transition-colors duration-[250ms] hover:text-green-950"
+                data-tab={tab.id}
+                data-pins={tab.items.map((it) => it.pin).join(',')}
+              >
+                {tab.label}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          operationsSection.tabs.map((tab, i) => (
+            <div
+              role="tabpanel"
+              id={`ops-panel-${tab.id}`}
+              aria-labelledby={`ops-tab-${tab.id}`}
+              hidden={i !== 0}
+              class="pt-8"
+              tabindex="0"
+            >
+              <p class="text-muted">{tab.intro}</p>
+              <ol class="mt-6">
+                {tab.items.map((item) => (
+                  <li class="ops-item flex gap-5 border-b border-stone py-5 last:border-b-0" data-pin={item.pin} tabindex="0">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-950 font-display text-[13px] font-semibold text-ivory">
+                      {item.pin}
+                    </span>
+                    <span>
+                      <span class="ops-item-title block text-[15px] font-semibold uppercase tracking-[0.06em] text-green-950">
+                        {item.title}
+                      </span>
+                      <span class="mt-1 block text-[15px] text-muted">{item.text}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Map -->
+      <div class="lg:col-span-6 lg:col-start-7" data-reveal>
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          class="ops-map mx-auto h-auto w-full max-w-[560px]"
+          role="img"
+          aria-labelledby="ops-map-title"
+          data-active-tab={firstTab.id}
+        >
+          <title id="ops-map-title">{operationsSection.mapLabel}</title>
+          <g>
+            {
+              countries.map((c) => (
+                <polygon
+                  points={toPoints(c.points)}
+                  class:list={['country', c.active && 'is-active']}
+                  data-country={c.id}
+                >
+                  <title>{c.name}</title>
+                </polygon>
+              ))
+            }
+          </g>
+          <g aria-hidden="true">
+            {
+              countryLabels.map((l) => {
+                const [x, y] = project(l.lon, l.lat);
+                return (
+                  <text x={x} y={y} class="country-label" text-anchor="middle">
+                    {l.text}
+                  </text>
+                );
+              })
+            }
+          </g>
+          <g aria-hidden="true">
+            {routes.map((pts) => <polyline points={pts} class="route" />)}
+          </g>
+          <g>
+            {
+              mapPins.map((p) => {
+                const [x, y] = project(p.lon, p.lat);
+                const [dx, dy] = pinOffsets[p.id] ?? [0, 0];
+                return (
+                  <g class="pin" data-map-pin={p.id} transform={`translate(${x + dx} ${y + dy})`}>
+                    <title>{`${p.id}. ${p.name}, ${p.country}`}</title>
+                    <circle r="17" class="pin-ring" />
+                    <circle r="12" class="pin-dot" />
+                    <text class="pin-num" text-anchor="middle" dy="4.5">
+                      {p.id}
+                    </text>
+                  </g>
+                );
+              })
+            }
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ops-tab[aria-selected='true'] {
+    color: var(--color-green-600);
+    border-bottom-color: var(--color-gold-500);
+  }
+  .ops-item {
+    cursor: default;
+    outline-offset: 4px;
+  }
+  .ops-item-title {
+    background-image: linear-gradient(var(--color-gold-500), var(--color-gold-500));
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    display: inline;
+    padding-bottom: 2px;
+    transition: background-size 250ms ease;
+  }
+  .ops-item:hover .ops-item-title,
+  .ops-item:focus-visible .ops-item-title,
+  .ops-item.is-current .ops-item-title {
+    background-size: 100% 1px;
+  }
+
+  .country {
+    fill: transparent;
+    stroke: var(--color-stone);
+    stroke-width: 1.75;
+    stroke-linejoin: round;
+  }
+  .country.is-active {
+    fill: rgb(20 90 40 / 0.15);
+  }
+  .country-label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    fill: var(--color-muted);
+  }
+  .route {
+    fill: none;
+    stroke: var(--color-green-600);
+    stroke-width: 1.25;
+    stroke-dasharray: 4 5;
+    opacity: 0.55;
+  }
+  .pin {
+    transition: opacity 250ms ease;
+  }
+  .pin-dot {
+    fill: var(--color-green-950);
+  }
+  .pin-num {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--color-ivory);
+  }
+  .pin-ring {
+    fill: none;
+    stroke: var(--color-gold-500);
+    stroke-width: 1.5;
+    opacity: 0;
+    transition: opacity 250ms ease;
+  }
+  .pin.is-dim {
+    opacity: 0.35;
+  }
+  .pin.is-active .pin-ring {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ops]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const pins = Array.from(root.querySelectorAll<SVGGElement>('[data-map-pin]'));
+
+    const setActivePin = (id: string | null) => {
+      pins.forEach((p) => p.classList.toggle('is-active', p.dataset.mapPin === id));
+      root.querySelectorAll<HTMLElement>('.ops-item').forEach((it) => {
+        const panel = it.closest<HTMLElement>('[role="tabpanel"]');
+        it.classList.toggle('is-current', !panel?.hidden && it.dataset.pin === id);
+      });
+    };
+
+    const select = (tab: HTMLButtonElement, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls')!);
+        if (panel) panel.hidden = !on;
+      });
+      const ids = (tab.dataset.pins ?? '').split(',');
+      pins.forEach((p) => p.classList.toggle('is-dim', !ids.includes(p.dataset.mapPin!)));
+      setActivePin(ids[0] ?? null);
+      if (focus) tab.focus();
+    };
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        let next = -1;
+        if (e.key === 'ArrowRight') next = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') next = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End') next = tabs.length - 1;
+        if (next >= 0) {
+          e.preventDefault();
+          select(tabs[next], true);
+        }
+      });
+    });
+
+    root.querySelectorAll<HTMLElement>('.ops-item').forEach((item) => {
+      const activate = () => setActivePin(item.dataset.pin ?? null);
+      item.addEventListener('mouseenter', activate);
+      item.addEventListener('focus', activate);
+    });
+
+    select(tabs[0]);
+  });
+</script>

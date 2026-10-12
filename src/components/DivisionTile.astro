@@ -1,0 +1,21 @@
+---
+import Icon from './Icon.astro';
+import type { Division } from '../data/site';
+
+interface Props {
+  division: Division;
+  href: string;
+}
+const { division, href } = Astro.props;
+---
+
+<li class="card flex items-start gap-5 p-6" data-reveal>
+  <Icon name={division.icon} class="mt-0.5 shrink-0 text-gold-500" />
+  <div class="flex-1">
+    <h3 class="font-display text-[18px] font-semibold uppercase tracking-[0.04em]">
+      <a href={href} class="card-link">{division.title}</a>
+    </h3>
+    <p class="mt-1 text-[15px] text-muted">{division.summary}</p>
+  </div>
+  <Icon name="arrow-right" size={20} class="arrow mt-0.5 shrink-0 text-green-600" />
+</li>

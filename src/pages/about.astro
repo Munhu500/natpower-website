@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import CompanyCard from '../components/CompanyCard.astro';
+import LeaderCard from '../components/LeaderCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { aboutPage, companies, leaders } from '../data/site';
+
+const { hero, overview, principles, leadership } = aboutPage;
+---
+
+<BaseLayout title="About" description={overview.lead}>
+  <PageHero {...hero} />
+
+  <section id="group" class="section bg-ivory" aria-labelledby="group-heading">
+    <div class="container-site grid gap-12 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-5" data-reveal>
+        <p class="eyebrow">{overview.eyebrow}</p>
+        <h2 id="group-heading" class="text-h2 mt-6">{overview.heading}</h2>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7" data-reveal>
+        <p class="prose-measure text-[20px] leading-[1.55] text-green-950">{overview.lead}</p>
+        {overview.paragraphs.map((p) => <p class="prose-measure mt-6">{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="companies" class="section bg-white" aria-labelledby="companies-heading">
+    <div class="container-site">
+      <SectionHeading id="companies-heading" eyebrow={aboutPage.companies.eyebrow} heading={aboutPage.companies.heading} intro={aboutPage.companies.intro} />
+      <div class="mt-14 grid gap-6 md:grid-cols-2" data-reveal-group>
+        {companies.map((c) => <CompanyCard company={c} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-ivory" aria-labelledby="principles-heading">
+    <div class="container-site">
+      <SectionHeading id="principles-heading" eyebrow={principles.eyebrow} heading={principles.heading} />
+      <div class="mt-14 grid gap-12 md:grid-cols-3 md:gap-8" data-reveal-group>
+        {
+          principles.items.map((item) => (
+            <div class="border-t border-stone pt-8" data-reveal>
+              <h3 class="text-h3">{item.title}</h3>
+              <p class="mt-4">{item.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section id="leadership" class="section bg-white" aria-labelledby="leadership-heading">
+    <div class="container-site">
+      <SectionHeading id="leadership-heading" eyebrow={leadership.eyebrow} heading={leadership.heading} intro={leadership.intro} />
+      <ul class="mt-14 grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3" data-reveal-group>
+        {leaders.map((l) => <LeaderCard leader={l} />)}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand background="white" />
+</BaseLayout>

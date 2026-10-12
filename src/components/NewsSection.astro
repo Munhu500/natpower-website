@@ -1,0 +1,21 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import NewsCard from './NewsCard.astro';
+import Icon from './Icon.astro';
+import { news, newsSection, ui } from '../data/site';
+---
+
+<section class="section bg-white" aria-labelledby="news-heading">
+  <div class="container-site">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading id="news-heading" eyebrow={newsSection.eyebrow} heading={newsSection.heading} />
+      <a href="/news-media#news" class="link-arrow" data-reveal>
+        {ui.seeAllNews}
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+    <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:[&>*:last-child]:col-span-2 lg:[&>*:last-child]:col-span-1" data-reveal-group>
+      {news.map((n) => <NewsCard item={n} />)}
+    </div>
+  </div>
+</section>

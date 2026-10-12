@@ -1,0 +1,58 @@
+---
+/** Layout only: the form is not connected to a backend yet. */
+import { contactPage } from '../data/site';
+
+const { form } = contactPage;
+const f = form.fields;
+---
+
+<form class="mt-10" action="#" method="post" novalidate data-enquiry-form>
+  <p class="mb-8 border-l-2 border-green-600 pl-4 text-[15px] text-muted">{form.note}</p>
+  <div class="grid gap-6 sm:grid-cols-2">
+    <div>
+      <label for="f-name" class="form-label">{f.name}</label>
+      <input id="f-name" name="name" type="text" autocomplete="name" class="form-field" required />
+    </div>
+    <div>
+      <label for="f-company" class="form-label">{f.company}</label>
+      <input id="f-company" name="company" type="text" autocomplete="organization" class="form-field" />
+    </div>
+    <div>
+      <label for="f-email" class="form-label">{f.email}</label>
+      <input id="f-email" name="email" type="email" autocomplete="email" class="form-field" required />
+    </div>
+    <div>
+      <label for="f-phone" class="form-label">{f.phone}</label>
+      <input id="f-phone" name="phone" type="tel" autocomplete="tel" class="form-field" />
+    </div>
+    <div>
+      <label for="f-country" class="form-label">{f.country}</label>
+      <select id="f-country" name="country" class="form-field">
+        <option value="">Select…</option>
+        {form.countries.map((c) => <option>{c}</option>)}
+      </select>
+    </div>
+    <div>
+      <label for="f-type" class="form-label">{f.enquiryType}</label>
+      <select id="f-type" name="enquiry" class="form-field" data-enquiry-type>
+        {form.enquiryTypes.map((t) => <option value={t.value}>{t.label}</option>)}
+      </select>
+    </div>
+    <div class="sm:col-span-2">
+      <label for="f-message" class="form-label">{f.message}</label>
+      <textarea id="f-message" name="message" rows="6" class="form-field" required></textarea>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary mt-8">{form.submit}</button>
+</form>
+
+<script>
+  // Preselect enquiry type from ?enquiry=sales|investor|general; block submission until wired up.
+  const form = document.querySelector<HTMLFormElement>('[data-enquiry-form]');
+  if (form) {
+    const type = new URLSearchParams(location.search).get('enquiry');
+    const select = form.querySelector<HTMLSelectElement>('[data-enquiry-type]');
+    if (type && select && [...select.options].some((o) => o.value === type)) select.value = type;
+    form.addEventListener('submit', (e) => e.preventDefault());
+  }
+</script>

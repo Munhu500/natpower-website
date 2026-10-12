@@ -1,0 +1,21 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import DivisionTile from './DivisionTile.astro';
+import Icon from './Icon.astro';
+import { divisions, divisionsSection } from '../data/site';
+---
+
+<section class="section bg-ivory" aria-labelledby="divisions-heading">
+  <div class="container-site">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading id="divisions-heading" eyebrow={divisionsSection.eyebrow} heading={divisionsSection.heading} intro={divisionsSection.intro} />
+      <a href={divisionsSection.link.href} class="link-arrow" data-reveal>
+        {divisionsSection.link.label}
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+    <ul class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      {divisions.map((d) => <DivisionTile division={d} href={`/diversified-interests#${d.id}`} />)}
+    </ul>
+  </div>
+</section>

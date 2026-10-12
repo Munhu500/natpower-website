@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import { regulators, ui, type DocumentItem } from '../data/site';
+
+interface Props {
+  doc: DocumentItem;
+}
+const { doc } = Astro.props;
+const issuerFull = regulators[doc.issuer];
+---
+
+<li class="card flex flex-col p-7" data-category={doc.category} data-reveal>
+  <div class="flex items-start justify-between gap-4">
+    <p class="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
+      {issuerFull ? <abbr title={issuerFull} class="no-underline">{doc.issuer}</abbr> : doc.issuer}
+    </p>
+    <Icon name="file-text" class="shrink-0 text-gold-500" />
+  </div>
+  <h3 class="mt-4 font-display text-[20px] font-semibold uppercase leading-[1.15] tracking-[0.02em]">{doc.title}</h3>
+  {issuerFull && <p class="mt-2 text-[14px] text-muted">{issuerFull}</p>}
+  <p class="mt-4 font-mono text-[14px] tracking-tight text-ink">{doc.reference}</p>
+  <div class="mt-auto pt-8">
+    {
+      doc.url ? (
+        <a href={doc.url} class="btn btn-outline-light min-h-11 px-5" target="_blank" rel="noopener">
+          <Icon name="download" size={16} />
+          {ui.download}
+          <span class="sr-only">
+            {doc.title} {doc.reference} ({ui.pdf})
+          </span>
+        </a>
+      ) : (
+        <div>
+          <p class="flex items-center gap-2 text-[14px] text-muted">
+            <Icon name="lock" size={16} />
+            {ui.onRequest}
+          </p>
+          <a href="/contact?enquiry=general#enquiry" class="link-arrow mt-4">
+            {ui.requestDocument}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+      )
+    }
+  </div>
+</li>

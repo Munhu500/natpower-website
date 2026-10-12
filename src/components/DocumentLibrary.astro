@@ -1,0 +1,63 @@
+---
+import DocumentCard from './DocumentCard.astro';
+import { compliancePage, documentCategories, documents } from '../data/site';
+---
+
+<div data-doc-library>
+  <div role="group" aria-label={compliancePage.filterLabel} class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+    {
+      documentCategories.map((c, i) => (
+        <button type="button" class="doc-filter btn min-h-11 shrink-0 px-5" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={c.id}>
+          {c.label}
+          <span class="text-[11px] opacity-70">
+            {c.id === 'all' ? documents.length : documents.filter((d) => d.category === c.id).length}
+          </span>
+        </button>
+      ))
+    }
+  </div>
+  <p class="sr-only" aria-live="polite" data-doc-status></p>
+  <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+    {documents.map((d) => <DocumentCard doc={d} />)}
+  </ul>
+</div>
+
+<style>
+  .doc-filter {
+    border-color: var(--color-stone);
+    color: var(--color-ink);
+    background: var(--color-white);
+  }
+  .doc-filter:hover {
+    border-color: var(--color-green-600);
+  }
+  .doc-filter[aria-pressed='true'] {
+    background: var(--color-green-600);
+    border-color: var(--color-green-600);
+    color: var(--color-ivory);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-doc-library]').forEach((lib) => {
+    const buttons = Array.from(lib.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const cards = Array.from(lib.querySelectorAll<HTMLElement>('[data-category]'));
+    const status = lib.querySelector<HTMLElement>('[data-doc-status]')!;
+    buttons.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const f = btn.dataset.filter;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        let shown = 0;
+        cards.forEach((c) => {
+          const show = f === 'all' || c.dataset.category === f;
+          c.hidden = !show;
+          if (show) {
+            shown++;
+            c.classList.add('is-visible');
+          }
+        });
+        status.textContent = `${shown} documents shown`;
+      }),
+    );
+  });
+</script>

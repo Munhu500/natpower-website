@@ -1,0 +1,24 @@
+---
+import { trustedBy } from '../data/site';
+---
+
+<section class="bg-ivory py-[72px] md:py-[96px]" aria-labelledby="trusted-heading">
+  <div class="container-site grid items-center gap-10 lg:grid-cols-12 lg:gap-6">
+    <div class="lg:col-span-4" data-reveal>
+      <p class="eyebrow">{trustedBy.eyebrow}</p>
+      <h2 id="trusted-heading" class="text-h3 mt-6 max-w-sm">{trustedBy.heading}</h2>
+    </div>
+    <ul class="grid gap-6 sm:grid-cols-2 lg:col-span-7 lg:col-start-6" data-reveal-group>
+      {
+        trustedBy.clients.map((c) => (
+          <li class="flex flex-col items-center justify-center gap-2 border border-stone bg-white px-6 py-10 text-center" data-reveal>
+            {/* TODO: replace with client logo (monochrome, max 48px tall) */}
+            <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">{c.placeholderLabel}</span>
+            <span class="font-display text-lg font-semibold uppercase tracking-[0.04em] text-green-950">{c.name}</span>
+            <span class="text-[14px] text-muted">{c.owner}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

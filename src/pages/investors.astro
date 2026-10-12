@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import DocumentCard from '../components/DocumentCard.astro';
+import Icon from '../components/Icon.astro';
+import { investorDocuments, investorsPage } from '../data/site';
+
+const { hero, overview, documents, contact } = investorsPage;
+---
+
+<BaseLayout title="Investors" description={overview.lead}>
+  <PageHero {...hero} />
+
+  <section class="section bg-ivory" aria-labelledby="luse-heading">
+    <div class="container-site grid gap-12 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-5" data-reveal>
+        <p class="eyebrow">{overview.eyebrow}</p>
+        <h2 id="luse-heading" class="text-h2 mt-6">{overview.heading}</h2>
+      </div>
+      <div class="lg:col-span-6 lg:col-start-7" data-reveal>
+        <p class="prose-measure text-[20px] leading-[1.55] text-green-950">{overview.lead}</p>
+        {overview.paragraphs.map((p) => <p class="prose-measure mt-6">{p}</p>)}
+        <a href={contact.href} class="link-arrow mt-10">
+          {contact.label}
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-white" aria-labelledby="investor-docs-heading">
+    <div class="container-site">
+      <SectionHeading id="investor-docs-heading" eyebrow={documents.eyebrow} heading={documents.heading} />
+      <ul class="mt-14 grid gap-6 md:grid-cols-3" data-reveal-group>
+        {investorDocuments.map((d) => <DocumentCard doc={d} />)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

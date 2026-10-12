@@ -1,0 +1,25 @@
+---
+import Media from './Media.astro';
+import Icon from './Icon.astro';
+import { whoWeAre } from '../data/site';
+---
+
+<section class="section bg-ivory" aria-labelledby="who-we-are">
+  <div class="container-site grid items-center gap-14 lg:grid-cols-12 lg:gap-6">
+    <div class="lg:col-span-6 lg:pr-10" data-reveal>
+      <p class="eyebrow">{whoWeAre.eyebrow}</p>
+      <h2 id="who-we-are" class="text-h2 mt-6">{whoWeAre.heading}</h2>
+      <p class="lead-serif prose-measure mt-8 text-green-950">{whoWeAre.lead}</p>
+      {whoWeAre.paragraphs.map((p) => <p class="prose-measure mt-6">{p}</p>)}
+      <a href={whoWeAre.link.href} class="link-arrow mt-10">
+        {whoWeAre.link.label}
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+    <div class="lg:col-span-5 lg:col-start-8" data-reveal>
+      <div class="aspect-[3/2] overflow-hidden lg:aspect-[4/5]">
+        <Media image={whoWeAre.image} />
+      </div>
+    </div>
+  </div>
+</section>

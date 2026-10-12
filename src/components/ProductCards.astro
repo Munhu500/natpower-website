@@ -1,0 +1,14 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import ProductCard from './ProductCard.astro';
+import { products, productsSection } from '../data/site';
+---
+
+<section class="section bg-white" aria-labelledby="products-heading">
+  <div class="container-site">
+    <SectionHeading id="products-heading" eyebrow={productsSection.eyebrow} heading={productsSection.heading} intro={productsSection.intro} />
+    <div class="mt-14 grid gap-6 md:grid-cols-3" data-reveal-group>
+      {products.map((p) => <ProductCard product={p} href={`/operations#${p.id}`} />)}
+    </div>
+  </div>
+</section>

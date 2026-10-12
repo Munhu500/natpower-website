@@ -1,0 +1,65 @@
+---
+/** Lucide icons at 1.5px stroke, 24px by default. */
+import {
+  Anchor,
+  ArrowLeft,
+  ArrowRight,
+  ChevronDown,
+  Download,
+  FileText,
+  HeartPulse,
+  Lock,
+  Mail,
+  MapPin,
+  Menu,
+  Package,
+  Phone,
+  Pickaxe,
+  Plane,
+  Ship,
+  Sun,
+  Tractor,
+  Truck,
+  Wrench,
+  X,
+  Zap,
+} from '@lucide/astro';
+
+const icons = {
+  anchor: Anchor,
+  'arrow-left': ArrowLeft,
+  'arrow-right': ArrowRight,
+  'chevron-down': ChevronDown,
+  download: Download,
+  'file-text': FileText,
+  'heart-pulse': HeartPulse,
+  lock: Lock,
+  mail: Mail,
+  'map-pin': MapPin,
+  menu: Menu,
+  package: Package,
+  phone: Phone,
+  pickaxe: Pickaxe,
+  plane: Plane,
+  ship: Ship,
+  sun: Sun,
+  tractor: Tractor,
+  truck: Truck,
+  wrench: Wrench,
+  x: X,
+  zap: Zap,
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+const Component = icons[name];
+---
+
+<Component size={size} stroke-width={1.5} class={className} aria-hidden="true" focusable="false" />

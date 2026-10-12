@@ -1,0 +1,28 @@
+---
+import Media from './Media.astro';
+import { complianceBand } from '../data/site';
+---
+
+<section class="on-dark relative overflow-hidden bg-green-950 text-ivory" aria-labelledby="compliance-heading">
+  <div class="absolute inset-0">
+    <Media image={complianceBand.image} tone="dark" />
+  </div>
+  <div class="overlay-left absolute inset-0" aria-hidden="true"></div>
+  <div class="overlay-bottom absolute inset-0 opacity-60" aria-hidden="true"></div>
+
+  <div class="section container-site relative">
+    <div class="max-w-2xl" data-reveal>
+      <p class="eyebrow">{complianceBand.eyebrow}</p>
+      <h2 id="compliance-heading" class="text-h2 mt-6">{complianceBand.heading}</h2>
+      <p class="prose-measure mt-6 text-ivory/85">{complianceBand.text}</p>
+      <ul class="mt-10 flex flex-wrap gap-3" aria-label="Regulators">
+        {
+          complianceBand.regulators.map((r) => (
+            <li class="border border-gold-300 px-5 py-3 text-[13px] font-semibold uppercase tracking-[0.18em] text-ivory">{r}</li>
+          ))
+        }
+      </ul>
+      <a href={complianceBand.cta.href} class="btn btn-outline-dark mt-12">{complianceBand.cta.label}</a>
+    </div>
+  </div>
+</section>

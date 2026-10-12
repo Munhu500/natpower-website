@@ -1,0 +1,58 @@
+---
+import Icon from './Icon.astro';
+import type { Office } from '../data/site';
+
+interface Props {
+  office: Office;
+}
+const { office } = Astro.props;
+---
+
+<article class="card flex h-full flex-col p-8 md:p-10" data-reveal>
+  <p class="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">{office.company}</p>
+  <h3 class="text-h3 mt-3">{office.name}</h3>
+  <address class="mt-8 space-y-5 not-italic">
+    <p class="flex gap-4">
+      <Icon name="map-pin" class="mt-0.5 shrink-0 text-gold-500" />
+      <span>
+        {office.addressLines.map((l) => (
+          <>
+            {l}
+            <br />
+          </>
+        ))}
+      </span>
+    </p>
+    {
+      office.email && (
+        <p class="flex gap-4">
+          <Icon name="mail" class="mt-0.5 shrink-0 text-gold-500" />
+          {office.placeholder ? <span>{office.email}</span> : <a href={`mailto:${office.email}`} class="link-inline">{office.email}</a>}
+        </p>
+      )
+    }
+    <div class="flex gap-4">
+      <Icon name="phone" class="mt-0.5 shrink-0 text-gold-500" />
+      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+        {
+          office.phones.map((p) => (
+            <>
+              <dt class="text-[15px] text-muted">{p.label}</dt>
+              <dd>
+                {office.placeholder ? p.value : <a href={`tel:${p.value.replace(/\s/g, '')}`} class="link-inline">{p.value}</a>}
+              </dd>
+            </>
+          ))
+        }
+        {
+          office.registration?.map((r) => (
+            <>
+              <dt class="text-[15px] text-muted">{r.label}</dt>
+              <dd>{r.value}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </div>
+  </address>
+</article>

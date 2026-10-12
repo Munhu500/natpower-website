@@ -1,0 +1,20 @@
+---
+/** Gold rule + eyebrow label + H2, with optional intro paragraph. */
+interface Props {
+  eyebrow: string;
+  heading: string;
+  intro?: string;
+  id?: string;
+  as?: 'h1' | 'h2';
+  class?: string;
+  align?: 'left' | 'center';
+}
+
+const { eyebrow, heading, intro, id, as: Tag = 'h2', class: className = '', align = 'left' } = Astro.props;
+---
+
+<div class:list={['max-w-3xl', align === 'center' && 'mx-auto text-center [&_.eyebrow]:items-center', className]} data-reveal>
+  <p class="eyebrow">{eyebrow}</p>
+  <Tag id={id} class="text-h2 mt-6">{heading}</Tag>
+  {intro && <p class:list={['prose-measure mt-6 text-muted', align === 'center' && 'mx-auto']}>{intro}</p>}
+</div>

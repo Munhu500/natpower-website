@@ -1,0 +1,93 @@
+---
+import Logo from './Logo.astro';
+import { companies, group, offices, sitemap, ui } from '../data/site';
+
+const [lusaka, kemptonPark] = offices;
+const linkClass = 'text-ivory/70 transition-colors duration-[250ms] hover:text-ivory';
+---
+
+<footer class="on-dark bg-green-950 text-ivory">
+  <div class="container-site pb-10 pt-20 md:pt-24">
+    <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-4">
+        <Logo variant="light" />
+        <p class="mt-6 max-w-sm text-[15px] text-ivory/70">{group.footerDescription}</p>
+      </div>
+
+      <div class="lg:col-span-2">
+        <h2 class="eyebrow">{ui.footerColumns.companies}</h2>
+        <ul class="mt-6 space-y-4 text-[15px]">
+          {
+            companies.map((c) => (
+              <li>
+                <span class="block text-ivory">{c.legalName}</span>
+                <span class="block text-ivory/70">{c.country}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {
+        [lusaka, kemptonPark].map((office) => (
+          <div class="lg:col-span-2">
+            <h2 class="eyebrow">{office.name}</h2>
+            <address class="mt-6 space-y-3 text-[15px] not-italic text-ivory/70">
+              <p>
+                {office.addressLines.map((line) => (
+                  <>
+                    {line}
+                    <br />
+                  </>
+                ))}
+              </p>
+              {office.email &&
+                (office.placeholder ? (
+                  <p>{office.email}</p>
+                ) : (
+                  <p>
+                    <a href={`mailto:${office.email}`} class={linkClass}>
+                      {office.email}
+                    </a>
+                  </p>
+                ))}
+              <ul class="space-y-1">
+                {office.phones.map((p) => (
+                  <li>
+                    {office.placeholder ? (
+                      p.value
+                    ) : (
+                      <a href={`tel:${p.value.replace(/\s/g, '')}`} class={linkClass}>
+                        {p.value}
+                      </a>
+                    )}
+                    <span class="sr-only"> ({p.label})</span>
+                  </li>
+                ))}
+              </ul>
+            </address>
+          </div>
+        ))
+      }
+
+      <div class="lg:col-span-2">
+        <h2 class="eyebrow">{ui.footerColumns.sitemap}</h2>
+        <ul class="mt-6 space-y-2 text-[15px]">
+          {
+            sitemap.map((l) => (
+              <li>
+                <a href={l.href} class={linkClass}>
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-16 border-t border-gold-500/30 pt-8 text-[14px] text-ivory/70">
+      <p>{group.copyright}</p>
+    </div>
+  </div>
+</footer>

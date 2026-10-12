@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { diversifiedPage, divisions, divisionsSection, equipmentRange } from '../data/site';
+
+const equipmentIcons = ['pickaxe', 'sun', 'anchor', 'heart-pulse', 'tractor', 'plane', 'truck'] as const;
+---
+
+<BaseLayout title="Diversified Interests" description={divisionsSection.intro}>
+  <PageHero {...diversifiedPage.hero} />
+
+  <section class="section bg-ivory" aria-labelledby="divisions-heading">
+    <div class="container-site">
+      <SectionHeading id="divisions-heading" eyebrow={divisionsSection.eyebrow} heading={divisionsSection.heading} intro={divisionsSection.intro} />
+      <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {
+          divisions.map((d) => (
+            <li id={d.id} class="card scroll-mt-24 p-8 md:p-10" data-reveal>
+              <Icon name={d.icon} class="text-gold-500" />
+              <h3 class="text-h3 mt-8">{d.title}</h3>
+              <p class="mt-4 text-[15px] text-muted">{d.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section bg-white" aria-labelledby="equipment-heading">
+    <div class="container-site grid gap-12 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-4" data-reveal>
+        <p class="eyebrow">{divisionsSection.eyebrow}</p>
+        <h2 id="equipment-heading" class="text-h2 mt-6">{equipmentRange.heading}</h2>
+        <p class="mt-6 text-muted">{equipmentRange.intro}</p>
+      </div>
+      <ol class="grid gap-x-8 sm:grid-cols-2 lg:col-span-7 lg:col-start-6" data-reveal-group>
+        {
+          equipmentRange.categories.map((c, i) => (
+            <li class="flex items-center gap-5 border-b border-stone py-5" data-reveal>
+              <span class="w-6 text-[12px] font-semibold tracking-[0.14em] text-muted">{String(i + 1).padStart(2, '0')}</span>
+              <Icon name={equipmentIcons[i]} class="text-gold-500" />
+              <span class="font-display text-[18px] font-semibold uppercase tracking-[0.04em]">{c}</span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <CtaBand background="white" />
+</BaseLayout>

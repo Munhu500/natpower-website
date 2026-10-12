@@ -1,0 +1,326 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Media from './Media.astro';
+import { group, nav, ui } from '../data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => href !== '/' && (path === href || path.startsWith(`${href}/`));
+---
+
+<header id="site-header" class="on-dark fixed inset-x-0 top-0 z-50" data-scrolled="false">
+  <div class="header-bg pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div class="header-fade overlay-top pointer-events-none absolute inset-x-0 top-0 h-40" aria-hidden="true"></div>
+
+  <div class="header-bar container-site relative flex items-center justify-between gap-6">
+    <Logo variant="light" />
+
+    <nav aria-label="Main" class="hidden xl:block">
+      <ul class="flex items-center gap-5 2xl:gap-8">
+        {
+          nav.map((item, i) => (
+            <li class="nav-item relative" data-nav-item>
+              <a
+                href={item.href}
+                class:list={[
+                  'nav-link inline-flex items-center gap-1 whitespace-nowrap py-3 text-[12.5px] font-medium uppercase tracking-[0.06em] text-ivory 2xl:text-[13px] 2xl:tracking-[0.08em]',
+                  isActive(item.href) && 'is-active',
+                ]}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                aria-haspopup={item.children ? 'true' : undefined}
+              >
+                {item.label}
+                {item.children && <Icon name="chevron-down" size={13} class="opacity-70" />}
+              </a>
+              {item.children && (
+                <div class:list={['mega on-light absolute top-full pt-4', i >= 4 ? 'right-0' : '-left-6']}>
+                  <div class="w-[680px] border border-stone border-t-gold-500 bg-white p-8">
+                    <div class="grid grid-cols-[1fr_180px] gap-8">
+                      <ul class="grid grid-cols-2 gap-x-8 gap-y-6">
+                        {item.children.map((child) => (
+                          <li>
+                            <a href={child.href} class="mega-link block">
+                              <span class="block text-[13px] font-semibold uppercase tracking-[0.08em] text-green-950">
+                                {child.label}
+                              </span>
+                              {child.description && (
+                                <span class="mt-1 block text-[14px] leading-snug text-muted">{child.description}</span>
+                              )}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                      {item.featured && (
+                        <a href={item.featured.href} class="card group/feat block border-0">
+                          <div class="card-media aspect-[3/2]">
+                            <Media image={item.featured.image} />
+                          </div>
+                          <span class="mt-3 block text-[14px] font-medium leading-snug text-ink">
+                            {item.featured.title}
+                          </span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href={group.quoteHref} class="quote-btn btn hidden sm:inline-flex xl:px-5 2xl:px-7">{ui.getQuote}</a>
+      <button
+        type="button"
+        class="inline-flex h-12 w-12 items-center justify-center text-ivory xl:hidden"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        data-menu-open
+      >
+        <Icon name="menu" size={28} />
+        <span class="sr-only">{ui.menu}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="mobile-menu fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-green-950 xl:hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site menu"
+    hidden
+  >
+    <div class="container-site flex h-[72px] shrink-0 items-center justify-between">
+      <Logo variant="light" />
+      <button type="button" class="inline-flex h-12 w-12 items-center justify-center text-ivory" data-menu-close>
+        <Icon name="x" size={28} />
+        <span class="sr-only">{ui.close}</span>
+      </button>
+    </div>
+    <nav aria-label="Mobile" class="container-site flex-1 pb-12 pt-6">
+      <ul class="border-t border-ivory/10">
+        {
+          nav.map((item) => (
+            <li class="border-b border-ivory/10">
+              {item.children ? (
+                <details class="group/acc">
+                  <summary class="flex cursor-pointer list-none items-center justify-between py-5 font-display text-2xl font-semibold uppercase tracking-[0.02em] text-ivory [&::-webkit-details-marker]:hidden">
+                    {item.label}
+                    <Icon name="chevron-down" class="text-gold-300 transition-transform duration-[250ms] group-open/acc:rotate-180" />
+                  </summary>
+                  <ul class="space-y-1 pb-5 pl-1">
+                    <li>
+                      <a href={item.href} class="block py-2 text-ivory/70 hover:text-ivory">
+                        {ui.overview}
+                      </a>
+                    </li>
+                    {item.children.map((child) => (
+                      <li>
+                        <a href={child.href} class="block py-2 text-ivory/70 hover:text-ivory" data-menu-link>
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ) : (
+                <a
+                  href={item.href}
+                  class="block py-5 font-display text-2xl font-semibold uppercase tracking-[0.02em] text-ivory"
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      <a href={group.quoteHref} class="btn btn-outline-dark mt-10 w-full">{ui.getQuote}</a>
+      <p class="mt-8 text-sm text-ivory/70">
+        <a href={`mailto:${group.email}`} class="hover:text-ivory">{group.email}</a>
+      </p>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header-bar {
+    height: 72px;
+    transition: height 250ms ease;
+  }
+  @media (min-width: 768px) {
+    .header-bar {
+      height: var(--header-h);
+    }
+  }
+  [data-scrolled='true'] .header-bar {
+    height: 64px;
+  }
+  @media (min-width: 768px) {
+    [data-scrolled='true'] .header-bar {
+      height: var(--header-h-scrolled);
+    }
+  }
+
+  .header-bg {
+    background: rgb(10 34 19 / 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    transition: opacity 250ms ease;
+  }
+  [data-scrolled='true'] .header-bg {
+    opacity: 1;
+  }
+  .header-fade {
+    transition: opacity 250ms ease;
+  }
+  [data-scrolled='true'] .header-fade {
+    opacity: 0;
+  }
+
+  /* Get a Quote: gold-300 outline over the hero, green-600 fill once scrolled */
+  .quote-btn {
+    border-color: var(--color-gold-300);
+    color: var(--color-ivory);
+  }
+  .quote-btn:hover {
+    background: var(--color-green-800);
+  }
+  [data-scrolled='true'] .quote-btn {
+    background: var(--color-green-600);
+    border-color: var(--color-green-600);
+  }
+  [data-scrolled='true'] .quote-btn:hover {
+    background: var(--color-green-800);
+    border-color: var(--color-green-800);
+  }
+
+  /* Nav links: 1px gold underline for hover and active */
+  .nav-link {
+    background-image: linear-gradient(var(--color-gold-300), var(--color-gold-300));
+    background-size: 0% 1px;
+    background-position: 0 calc(100% - 6px);
+    background-repeat: no-repeat;
+    transition: background-size 250ms ease;
+  }
+  .nav-link:hover,
+  .nav-link.is-active,
+  .nav-item:focus-within > .nav-link {
+    background-size: 100% 1px;
+  }
+
+  /* Mega-menu */
+  .mega {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 250ms ease,
+      transform 250ms ease,
+      visibility 0s linear 250ms;
+  }
+  .nav-item:hover > .mega,
+  .nav-item:focus-within > .mega {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .nav-item[data-dismissed] > .mega {
+    visibility: hidden;
+    opacity: 0;
+  }
+  .mega-link span:first-child {
+    background-image: linear-gradient(var(--color-gold-500), var(--color-gold-500));
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 250ms ease;
+  }
+  .mega-link:hover span:first-child,
+  .mega-link:focus-visible span:first-child {
+    background-size: 100% 1px;
+  }
+
+  /* Mobile menu slide-in */
+  .mobile-menu {
+    transform: translateX(100%);
+    transition: transform 350ms var(--ease-reveal);
+  }
+  .mobile-menu.is-open {
+    transform: none;
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => {
+    header.dataset.scrolled = window.scrollY > 24 ? 'true' : 'false';
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Escape closes an open mega-menu until the pointer/focus leaves it
+  document.querySelectorAll<HTMLElement>('[data-nav-item]').forEach((item) => {
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        item.setAttribute('data-dismissed', '');
+        item.querySelector<HTMLElement>('.nav-link')?.focus();
+      }
+    });
+    const reset = () => item.removeAttribute('data-dismissed');
+    item.addEventListener('mouseleave', reset);
+    item.addEventListener('focusout', (e) => {
+      if (!item.contains(e.relatedTarget as Node)) reset();
+    });
+  });
+
+  // Mobile menu
+  const menu = document.getElementById('mobile-menu')!;
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]')!;
+  const closeBtn = menu.querySelector<HTMLButtonElement>('[data-menu-close]')!;
+
+  const open = () => {
+    menu.hidden = false;
+    requestAnimationFrame(() => menu.classList.add('is-open'));
+    openBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  };
+  const close = () => {
+    menu.classList.remove('is-open');
+    openBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(() => (menu.hidden = true), reduce ? 0 : 350);
+    openBtn.focus();
+  };
+
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => !menu.hidden && close()));
+  menu.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+    if (e.key === 'Tab') {
+      const focusables = Array.from(
+        menu.querySelectorAll<HTMLElement>('a, button, summary'),
+      ).filter((el) => el.offsetParent !== null);
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+</script>

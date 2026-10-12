@@ -1,0 +1,60 @@
+---
+import { stats, statsSection } from '../data/site';
+---
+
+<section class="on-dark bg-green-950 py-[72px] text-ivory md:py-[96px]" aria-labelledby="at-a-glance">
+  <div class="container-site">
+    <p class="eyebrow">{statsSection.eyebrow}</p>
+    <h2 id="at-a-glance" class="sr-only">{statsSection.heading}</h2>
+    <dl class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
+      {
+        stats.map((s) => (
+          <div
+            class="stat flex flex-col-reverse gap-4 py-8 sm:px-8 lg:py-2"
+            data-reveal
+          >
+            <dt class="max-w-[16rem] text-[15px] leading-snug text-ivory/70">{s.label}</dt>
+            <dd class="font-display text-[52px] font-semibold leading-none tracking-[0.01em] text-gold-300 md:text-[64px]">
+              {s.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  /* Thin dividers in stone at 10% opacity */
+  .stat {
+    border-color: rgb(228 222 208 / 0.1);
+  }
+  .stat + .stat {
+    border-top-width: 1px;
+  }
+  @media (min-width: 640px) {
+    .stat + .stat {
+      border-top-width: 0;
+    }
+    .stat:nth-child(even) {
+      border-left-width: 1px;
+    }
+    .stat:nth-child(odd) {
+      padding-left: 0;
+    }
+    .stat:nth-child(n + 3) {
+      border-top-width: 1px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .stat:nth-child(n + 3) {
+      border-top-width: 0;
+    }
+    .stat:nth-child(3) {
+      padding-left: 2rem;
+    }
+    .stat + .stat {
+      border-left-width: 1px;
+    }
+  }
+</style>

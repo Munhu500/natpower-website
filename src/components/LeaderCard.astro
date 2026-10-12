@@ -1,0 +1,19 @@
+---
+import Media from './Media.astro';
+import type { Leader } from '../data/site';
+
+interface Props {
+  leader: Leader;
+}
+const { leader } = Astro.props;
+---
+
+<li class="card" data-reveal>
+  <div class="card-media aspect-[4/5]">
+    <Media image={leader.image} />
+  </div>
+  <div class="p-6">
+    <h3 class="font-display text-[20px] font-semibold uppercase tracking-[0.02em]">{leader.name}</h3>
+    <p class="mt-1 text-[15px] text-muted">{leader.title}</p>
+  </div>
+</li>

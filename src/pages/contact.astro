@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import OfficeCard from '../components/OfficeCard.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import Media from '../components/Media.astro';
+import { contactPage, offices } from '../data/site';
+---
+
+<BaseLayout title="Contact" description="Contact the Natpower Group offices in Lusaka and Kempton Park.">
+  <PageHero {...contactPage.hero} />
+
+  <section class="section bg-ivory" aria-labelledby="offices-heading">
+    <div class="container-site">
+      <SectionHeading id="offices-heading" eyebrow={contactPage.offices.eyebrow} heading={contactPage.offices.heading} />
+      <div class="mt-14 grid gap-6 md:grid-cols-2" data-reveal-group>
+        {offices.map((o) => <OfficeCard office={o} />)}
+      </div>
+    </div>
+  </section>
+
+  <section id="enquiry" class="section scroll-mt-16 bg-white" aria-labelledby="enquiry-heading">
+    <div class="container-site grid gap-14 lg:grid-cols-12 lg:gap-6">
+      <div class="lg:col-span-6" data-reveal>
+        <p class="eyebrow">{contactPage.form.eyebrow}</p>
+        <h2 id="enquiry-heading" class="text-h2 mt-6">{contactPage.form.heading}</h2>
+        <EnquiryForm />
+      </div>
+      <div class="lg:col-span-5 lg:col-start-8" data-reveal>
+        {/* TODO: replace with embedded map */}
+        <div class="aspect-[4/5] h-full max-h-[720px] w-full border border-stone">
+          <Media image={{ alt: contactPage.map.label, placeholderLabel: contactPage.map.label }} />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

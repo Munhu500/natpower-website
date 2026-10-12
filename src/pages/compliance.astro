@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import DocumentLibrary from '../components/DocumentLibrary.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { compliancePage } from '../data/site';
+---
+
+<BaseLayout title="Compliance" description={compliancePage.intro.text}>
+  <PageHero {...compliancePage.hero} />
+
+  <section class="section bg-ivory" aria-labelledby="library-heading">
+    <div class="container-site">
+      <SectionHeading id="library-heading" eyebrow={compliancePage.intro.eyebrow} heading={compliancePage.intro.heading} intro={compliancePage.intro.text} />
+      <div class="mt-14">
+        <DocumentLibrary />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

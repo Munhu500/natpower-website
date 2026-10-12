@@ -1,0 +1,390 @@
+@import 'tailwindcss';
+
+/*
+ * Natpower design tokens.
+ * The default Tailwind palette is removed so only brand tokens exist
+ * (this guarantees no red, and none of the sampled logo hexes).
+ */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-green-950: #0a2213;
+  --color-green-800: #123a20;
+  --color-green-600: #145a28;
+  --color-gold-500: #a8843a;
+  --color-gold-300: #d6bd7f;
+  /* Text-only gold for small eyebrow labels on light backgrounds.
+     gold-500 on ivory is 3.17:1 and fails WCAG AA for 12px text; this is 4.74:1. */
+  --color-gold-700: #86682b;
+  --color-ivory: #f7f4ec;
+  --color-white: #ffffff;
+  --color-stone: #e4ded0;
+  --color-ink: #1b1f1c;
+  --color-muted: #6a6f68;
+
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --breakpoint-xl: 80rem; /* 1280 */
+}
+
+@layer base {
+  :root {
+    --header-h: 96px;
+    --header-h-scrolled: 72px;
+  }
+
+  html {
+    scroll-padding-top: var(--header-h-scrolled);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-green-600);
+    outline-offset: 3px;
+  }
+
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-gold-300);
+  }
+
+  ::selection {
+    background: var(--color-green-600);
+    color: var(--color-ivory);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 32px;
+    }
+  }
+
+  .section {
+    padding-block: 72px;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-block: 96px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section {
+      padding-block: 128px;
+    }
+  }
+
+  /* Type scale */
+  .text-hero {
+    /* Brief: 64–88px. Mobile floor lowered to 40px so two-line headlines fit at 375px. */
+    font-size: clamp(2.5rem, 1rem + 6vw, 5.5rem);
+    line-height: 1.02;
+  }
+  .text-h2 {
+    font-size: clamp(2.25rem, 1.75rem + 1.2vw, 3rem);
+  }
+  .text-h3 {
+    font-size: clamp(1.375rem, 1.25rem + 0.4vw, 1.625rem);
+  }
+  .prose-measure {
+    max-width: 65ch;
+  }
+
+  .lead-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+    line-height: 1.4;
+  }
+
+  /* Eyebrow: 40×1 gold rule + uppercase gold label */
+  .eyebrow {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: var(--color-gold-700);
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--color-gold-500);
+  }
+  .on-dark .eyebrow {
+    color: var(--color-gold-300);
+  }
+  .on-dark .eyebrow::before {
+    background: var(--color-gold-300);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 250ms ease,
+      border-color 250ms ease,
+      color 250ms ease;
+  }
+  .btn-primary {
+    background: var(--color-green-600);
+    color: var(--color-ivory);
+  }
+  .btn-primary:hover {
+    background: var(--color-green-800);
+  }
+  .btn-outline-dark {
+    border-color: var(--color-gold-300);
+    color: var(--color-ivory);
+    background: transparent;
+  }
+  .btn-outline-dark:hover {
+    background: var(--color-green-800);
+  }
+  .btn-outline-light {
+    border-color: var(--color-green-600);
+    color: var(--color-green-600);
+    background: transparent;
+  }
+  .btn-outline-light:hover {
+    background: var(--color-green-600);
+    color: var(--color-ivory);
+  }
+
+  /* Text link with 1px gold underline that grows on hover */
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-green-600);
+    padding-bottom: 4px;
+    background-image: linear-gradient(var(--color-gold-500), var(--color-gold-500));
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition:
+      background-size 250ms ease,
+      color 250ms ease;
+  }
+  .link-arrow:hover,
+  .link-arrow:focus-visible {
+    background-size: 100% 1px;
+  }
+  .on-dark .link-arrow {
+    color: var(--color-ivory);
+    background-image: linear-gradient(var(--color-gold-300), var(--color-gold-300));
+  }
+  .link-arrow svg,
+  .card svg.arrow {
+    transition: transform 250ms ease;
+  }
+  .link-arrow:hover svg,
+  .card:hover svg.arrow,
+  .card:focus-within svg.arrow {
+    transform: translateX(4px);
+  }
+
+  .link-inline {
+    color: var(--color-green-600);
+    text-decoration: underline;
+    text-decoration-color: var(--color-gold-500);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: color 250ms ease;
+  }
+  .link-inline:hover {
+    color: var(--color-green-800);
+  }
+
+  /* Cards */
+  .card {
+    position: relative;
+    background: var(--color-white);
+    border: 1px solid var(--color-stone);
+    transition: border-color 250ms ease;
+  }
+  .card:hover,
+  .card:focus-within {
+    border-color: var(--color-gold-500);
+  }
+  .card-media {
+    overflow: hidden;
+  }
+  .card-media > * {
+    transition: transform 600ms var(--ease-reveal);
+  }
+  .card:hover .card-media > *,
+  .card:focus-within .card-media > * {
+    transform: scale(1.04);
+  }
+  /* Stretch a card's primary link across the whole card */
+  .card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Image overlays: green-950 75% → transparent. Never flat black. */
+  .overlay-bottom {
+    background: linear-gradient(to top, rgb(10 34 19 / 0.75) 0%, rgb(10 34 19 / 0.35) 45%, rgb(10 34 19 / 0) 100%);
+  }
+  .overlay-left {
+    background: linear-gradient(to right, rgb(10 34 19 / 0.75) 0%, rgb(10 34 19 / 0.35) 55%, rgb(10 34 19 / 0) 100%);
+  }
+  /* Header legibility over imagery */
+  .overlay-top {
+    background: linear-gradient(to bottom, rgb(10 34 19 / 0.55) 0%, rgb(10 34 19 / 0) 100%);
+  }
+
+  .hero-arrow {
+    display: inline-flex;
+    height: 48px;
+    width: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(247 244 236 / 0.35);
+    border-radius: 2px;
+    color: var(--color-ivory);
+    transition:
+      background-color 250ms ease,
+      border-color 250ms ease;
+  }
+  .hero-arrow:hover {
+    background: var(--color-green-800);
+    border-color: var(--color-gold-300);
+  }
+
+
+  .form-field {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    background: var(--color-white);
+    border: 1px solid var(--color-stone);
+    border-radius: 2px;
+    color: var(--color-ink);
+    font-size: 16px;
+    transition: border-color 250ms ease;
+  }
+  .form-field:hover {
+    border-color: var(--color-muted);
+  }
+  .form-field:focus-visible {
+    border-color: var(--color-green-600);
+    outline-offset: 0;
+  }
+  .form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+}
+
+/* Scroll reveal — only hides content when JS has loaded */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 700ms var(--ease-reveal),
+      transform 700ms var(--ease-reveal);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Light panels inside dark regions (e.g. mega-menus) restore green focus rings */
+.on-light :focus-visible {
+  outline-color: var(--color-green-600);
+}

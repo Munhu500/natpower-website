@@ -1,0 +1,23 @@
+---
+import Media from './Media.astro';
+import type { ImageRef } from '../data/site';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  image: ImageRef;
+}
+const { eyebrow, title, image } = Astro.props;
+---
+
+<section class="on-dark relative flex min-h-[440px] items-end overflow-hidden bg-green-950 text-ivory md:min-h-[560px] lg:h-[64vh]">
+  <div class="absolute inset-0">
+    <Media image={image} tone="dark" loading="eager" />
+  </div>
+  <div class="overlay-bottom absolute inset-0" aria-hidden="true"></div>
+  <div class="overlay-left absolute inset-0 opacity-70" aria-hidden="true"></div>
+  <div class="container-site relative pb-16 pt-40 md:pb-20">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="mt-6 max-w-4xl text-[clamp(2.5rem,1.5rem+3.5vw,4.5rem)]">{title}</h1>
+  </div>
+</section>
