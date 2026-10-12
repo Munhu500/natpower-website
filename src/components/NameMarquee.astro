@@ -1,0 +1,130 @@
+---
+/**
+ * Two-row scrolling name marquee. Pure CSS: each list is rendered twice in
+ * one track that moves 0 → -50%, so the loop is seamless. The duplicate is
+ * aria-hidden. Under prefers-reduced-motion each row becomes a static,
+ * centred, wrapping list (single copy).
+ */
+import { nameMarquee } from '../data/site';
+---
+
+<section class="bg-ivory py-12 md:py-16" aria-labelledby="marquee-heading">
+  <h2 id="marquee-heading" class="sr-only">{nameMarquee.heading}</h2>
+  <div class="border-t border-stone">
+    {
+      nameMarquee.rows.map((row) => (
+        <div class="border-b border-stone py-8">
+          <div class="container-site">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-700 md:text-[12px]">{row.eyebrow}</p>
+          </div>
+          <div class="marquee mt-6">
+            <div
+              class:list={['marquee-track', row.direction === 'right' && 'marquee-reverse']}
+              style={`--marquee-duration:${row.duration}s`}
+            >
+              {[0, 1].map((copy) => (
+                <ul
+                  class:list={[
+                    'marquee-list font-display text-[16px] font-semibold uppercase tracking-[0.08em] md:text-[22px]',
+                    row.tone === 'muted' ? 'text-muted' : 'text-ink',
+                    copy === 1 && 'marquee-dup',
+                  ]}
+                  aria-label={copy === 0 ? row.ariaLabel : undefined}
+                  aria-hidden={copy === 1 ? 'true' : undefined}
+                >
+                  {row.names.map((name) => (
+                    <li class="marquee-item">{name}</li>
+                  ))}
+                </ul>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .marquee {
+    --fade: 48px;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+  }
+  @media (min-width: 768px) {
+    .marquee {
+      --fade: 120px;
+    }
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll var(--marquee-duration, 45s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-reverse {
+    animation-direction: reverse;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  .marquee-list {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    display: flex;
+    align-items: center;
+  }
+  /* Gold diamond separator, 48px each side. Every item has one so both copies join seamlessly. */
+  .marquee-item::after {
+    content: '';
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-inline: 48px;
+    background: var(--color-gold-500);
+    transform: rotate(45deg);
+  }
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .marquee-track {
+      animation: none;
+      width: auto;
+      justify-content: center;
+      padding-inline: 20px;
+    }
+    .marquee-list {
+      flex-shrink: 1;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px 56px;
+      white-space: normal;
+      text-align: center;
+    }
+    .marquee-dup {
+      display: none;
+    }
+    /* Static list: separators would dangle at line ends, so spacing does the work */
+    .marquee-item::after {
+      display: none;
+    }
+  }
+</style>

@@ -72,9 +72,6 @@ Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 - Operations page: tanker fleet, pit dewatering
 - Gallery: 6 images
 
-### Clients
-- Konkola Copper Mines and Mimbula Minerals logos (Trusted By strip)
-
 ### Content to confirm
 - **Gallery captions:** written as stand-ins because the old site's gallery could not be reached. Replace them with the old captions, typos fixed.
 - **Silica sand grading specification**
@@ -84,4 +81,4 @@ Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 ### Not yet built
 - Enquiry form backend
 - Embedded map on Contact
-- Gallery lightbox behaviour (layout exists in `news-media.astro`, hidden)
+- Gallery lightbox behaviour (layout exists in `GallerySection.astro`, hidden)

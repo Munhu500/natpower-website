@@ -498,14 +498,53 @@ export const investorDocuments: DocumentItem[] = [
 // Clients
 // ---------------------------------------------------------------------------
 
-export const trustedBy = {
-  eyebrow: 'Trusted By',
-  heading: 'Supplying Africa’s leading mining houses',
-  clients: [
-    { name: 'Konkola Copper Mines', owner: 'Vedanta Resources', placeholderLabel: 'KCM logo' },
-    { name: 'Mimbula Minerals', owner: 'Moxico Resources', placeholderLabel: 'Mimbula Minerals logo' },
+/**
+ * Home page name marquee (text only, no logos).
+ * Row 1: clients and partners. Row 2: registrations and licences.
+ * Never label regulators as partners, and never include LuSE.
+ */
+export const nameMarquee = {
+  heading: 'Clients, partners and registrations',
+  rows: [
+    {
+      id: 'clients',
+      eyebrow: 'Clients & Partners',
+      ariaLabel: 'Clients and partners',
+      tone: 'ink',
+      direction: 'left',
+      duration: 45,
+      names: [
+        'Vedanta Resources',
+        'Konkola Copper Mines',
+        'Moxico Resources',
+        'Mimbula Minerals',
+        'Anglo American',
+        'Sssk Environmental Services',
+        'BABA Drilling & Exploration',
+      ],
+    },
+    {
+      id: 'registrations',
+      eyebrow: 'Registered & Licensed With',
+      ariaLabel: 'Registered and licensed with',
+      tone: 'muted',
+      direction: 'right',
+      duration: 55,
+      names: [
+        'ITAC',
+        'ZEMA',
+        'ZAMRA',
+        'ZRA',
+        'PACRA',
+        'NAPSA',
+        'Workers’ Compensation Fund Control Board',
+        'National Council for Construction',
+        'Engineering Institution of Zambia',
+        'ZPPA',
+      ],
+    },
   ],
-};
+} as const;
 
 // ---------------------------------------------------------------------------
 // News & gallery

@@ -68,6 +68,8 @@ The Natpower Group of Companies has two **sister** companies. They are not paren
 
 **Clients:** Konkola Copper Mines (Vedanta Resources) and Mimbula Minerals (Moxico Resources).
 
+**Home name marquee** (`nameMarquee` in `site.ts`, text only, no logos): row 1 "Clients & Partners", row 2 "Registered & Licensed With". Never label regulators as partners, and never include LuSE in either row.
+
 **Diversified interests (secondary):** Power, Mining, Health, Shipping, Equipment and General Supplies divisions. Equipment range: Mining, Solar, Marine, Healthcare, Agricultural, Airport, Transportation.
 
 **Compliance:**
