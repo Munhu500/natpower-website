@@ -16,6 +16,19 @@ Marketing website for the Natpower Group of Companies. Built with Astro, Tailwin
 
 On Vercel, use the Astro framework preset: build command `npm run build`, output directory `dist`.
 
+## Preview deployment (Apache / Hostinger)
+
+| Command | Action |
+|---|---|
+| `npm run build:preview` | Build with `PUBLIC_NOINDEX=true` |
+| `npm run package:preview` | Preview build + zip the contents of `dist/` to `deploy/natpower-preview.zip` |
+
+- Upload the zip to the web root of the preview host and extract it there. `index.html`, `.htaccess` and `robots.txt` sit at the zip root.
+- `site` in `astro.config.mjs` defaults to `https://preview.yourdomain.com` (used for canonical and og:image URLs). Override with `SITE_URL=https://… npm run package:preview`.
+- `PUBLIC_NOINDEX=true` adds `<meta name="robots" content="noindex, nofollow">` to every page and outputs a `robots.txt` with `Disallow: /`. Unset (the launch build) is indexable.
+- `public/.htaccess`: custom 404, HTTPS redirect, gzip, 1-year immutable caching for images, `no-cache` for HTML. `public/_astro/.htaccess` gives hashed build assets 1-year immutable caching.
+- For the real launch: `SITE_URL=https://natpower.org npm run build` (no `PUBLIC_NOINDEX`).
+
 ## Structure
 
 ```

@@ -5,6 +5,7 @@ Astro + Tailwind CSS v4 + TypeScript static site. **Layout only for now**: stati
 ## Working in this repo
 
 - `npm run dev` / `npm run build` / `npm run check` (astro check must stay at 0 errors).
+- Preview hosting (Apache/Hostinger): `npm run package:preview` builds with `PUBLIC_NOINDEX=true` and zips `dist/` contents to `deploy/natpower-preview.zip`. `site` defaults to the preview URL; set `SITE_URL` for other hosts. Never ship a launch build with `PUBLIC_NOINDEX=true`.
 - ALL copy and data live in `src/data/site.ts`. Never hardcode copy in components.
 - Design tokens live in `src/styles/global.css` (`@theme`). The default Tailwind palette is removed on purpose: only brand tokens exist.
 - `gold-700` (`#86682B`) is an implementation-only, text-only token for small gold labels on light backgrounds. `gold-500` on ivory is 3.17:1 and fails WCAG AA for 12px text. Rules, underlines and icons still use `gold-500`.

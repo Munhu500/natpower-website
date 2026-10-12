@@ -8,7 +8,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "build:preview": "PUBLIC_NOINDEX=true astro build",
+    "package:preview": "bash scripts/package-preview.sh"
   },
   "dependencies": {
     "@lucide/astro": "^1.55.0",
@@ -18,6 +20,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/node": "^22.20.5",
     "typescript": "^5.9.3"
   }
 }
