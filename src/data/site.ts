@@ -2,8 +2,11 @@
  * Natpower Group — single source of truth for all site copy and data.
  * Components must read from here; no copy is hardcoded in components.
  *
- * Anything marked `placeholder: true` or containing "TBC" needs real content
+ * Anything containing "TBC" or a `placeholderLabel` needs real content
  * before launch. See README.md → "Placeholders" for the full list.
+ *
+ * Content rules: never name directors or executives; never name the
+ * toll-manufacturing partner; all enquiries go to info@natpower.org.
  */
 
 // ---------------------------------------------------------------------------
@@ -39,7 +42,6 @@ export interface Office {
   email?: string;
   phones: { label: string; value: string }[];
   registration?: { label: string; value: string }[];
-  placeholder?: boolean;
 }
 
 export interface Company {
@@ -49,8 +51,6 @@ export interface Company {
   country: string;
   role: string;
   location: string;
-  href: string;
-  hrefPlaceholder: boolean;
 }
 
 export interface Stat {
@@ -94,7 +94,8 @@ export interface NewsItem {
   location: string;
   title: string;
   excerpt: string;
-  href: string;
+  /** Optional: announcements without a page or document are not linked. */
+  href?: string;
   image: ImageRef;
 }
 
@@ -122,12 +123,6 @@ export interface OperationsTab {
   items: { pin: number; eyebrow?: string; title: string; text: string }[];
 }
 
-export interface Leader {
-  name: string;
-  title: string;
-  image: ImageRef;
-}
-
 export interface GalleryItem {
   caption: string;
   image: ImageRef;
@@ -145,7 +140,7 @@ export const group = {
     'Two sister companies under the Natpower Group, supplying industrial chemicals and compliant bulk logistics to mining houses across southern and central Africa.',
   email: 'info@natpower.org',
   copyright: '© 2026 Natpower Group of Companies. All rights reserved.',
-  experienceClaim: '35+ years of combined leadership experience',
+  experienceClaim: '35+ years of combined experience across our directors and shareholders',
   quoteHref: '/contact?enquiry=sales#enquiry',
   logo: {
     alt: 'Natpower Group logo',
@@ -176,19 +171,15 @@ export const companies: Company[] = [
     legalName: 'Natpower Industrial Corporation Limited',
     country: 'Zambia',
     location: 'Lusaka, Zambia',
-    role: 'Supply of industrial chemicals, bulk logistics and mining services to mining houses in Zambia, the DRC and Malawi.',
-    href: '#',
-    hrefPlaceholder: true,
+    role: 'The group’s operating track record: sulphuric acid, granular sulphur and silica sand supply to Konkola Copper Mines (Vedanta Resources) and Mimbula Minerals (Moxico Resources), dangerous-goods logistics, ZEMA-certified warehousing, and the group’s permits and licences.',
   },
   {
     id: 'natpower-sa',
     shortName: 'Natpower Industrial Corporation (Pty) Ltd',
     legalName: 'Natpower Industrial Corporation (Pty) Ltd',
     country: 'South Africa',
-    location: 'Kempton Park, Gauteng',
-    role: 'Regional sourcing, export permitting and corridor coordination from South Africa.',
-    href: '#',
-    hrefPlaceholder: true,
+    location: 'Kempton Park, Gauteng, South Africa',
+    role: 'Leads the group’s sulphuric acid supply partnership with a South African mining house, for supply into Zambia, the DRC and Malawi.',
   },
 ];
 
@@ -212,13 +203,9 @@ export const offices: Office[] = [
     name: 'Kempton Park Office',
     company: 'Natpower Industrial Corporation (Pty) Ltd',
     country: 'South Africa',
-    addressLines: ['[Street address TBC]', '[Suburb TBC], Kempton Park', 'Gauteng [Postal code TBC], South Africa'],
-    email: '[Email TBC]',
-    phones: [
-      { label: 'General enquiries', value: '[+27 phone TBC]' },
-      { label: 'Sales', value: '[+27 phone TBC]' },
-    ],
-    placeholder: true,
+    addressLines: ['Kempton Park, Gauteng, South Africa'],
+    email: 'info@natpower.org',
+    phones: [],
   },
 ];
 
@@ -233,7 +220,6 @@ export const nav: NavItem[] = [
     children: [
       { label: 'Natpower Group', href: '/about#group', description: 'Who we are and what we stand for' },
       { label: 'Our Companies', href: '/about#companies', description: 'Natpower Industrial Corporation in Zambia and South Africa' },
-      { label: 'Leadership', href: '/about#leadership', description: 'The team guiding the group' },
     ],
     featured: {
       title: 'Two companies. One group.',
@@ -304,7 +290,6 @@ export const ui = {
     companies: 'Group Companies',
     sitemap: 'Sitemap',
   },
-  visit: 'Visit website',
   pdf: 'PDF',
 };
 
@@ -344,8 +329,8 @@ export const whoWeAre = {
   heading: 'A group built for Africa’s mining industry',
   lead: 'We believe in the future of Africa, and we are proud to help shape it.',
   paragraphs: [
-    'The Natpower Group supplies the industrial chemicals that keep southern and central Africa’s mines in production. We deliver sulphuric acid, granular sulphur and silica sand to mining houses in Zambia, the DRC and Malawi, backed by compliant bulk dangerous-goods logistics and specialist mining services.',
-    'The group brings together two sister companies: Natpower Industrial Corporation Limited in Lusaka, Zambia, and Natpower Industrial Corporation (Pty) Ltd in Kempton Park, South Africa. Together our Zambian and South African companies manage the full corridor from source to site, guided by 35+ years of combined leadership experience.',
+    'The Natpower Group supplies the industrial chemicals that keep southern and central Africa’s mines in production: sulphuric acid, granular sulphur and silica sand for mining houses in Zambia, the DRC and Malawi, backed by compliant dangerous-goods logistics and specialist mining services.',
+    'The group is made up of two sister companies. Natpower Industrial Corporation Limited, headquartered in Lusaka, Zambia, carries the group’s operating track record with mining houses including Konkola Copper Mines and Mimbula Minerals. Natpower Industrial Corporation (Pty) Ltd, in Kempton Park, South Africa, leads the group’s sulphuric acid supply partnership with a South African mining house. The group draws on 35+ years of combined experience across our directors and shareholders.',
   ],
   link: { label: 'About the group', href: '/about' },
   image: { alt: 'Close detail of granular sulphur', placeholderLabel: 'Textured photo: granular sulphur close-up' } as ImageRef,
@@ -380,8 +365,8 @@ export const operationsSection = {
       label: 'Our Companies',
       intro: 'Two sister companies operating either end of the corridor.',
       items: [
-        { pin: 4, eyebrow: 'Zambia', title: 'Natpower Industrial Corporation Limited', text: 'Headquarters in Makeni, Lusaka. Sales, distribution and mining services.' },
-        { pin: 2, eyebrow: 'South Africa', title: 'Natpower Industrial Corporation (Pty) Ltd', text: 'Kempton Park, Gauteng. Regional sourcing and export coordination.' },
+        { pin: 4, eyebrow: 'Zambia', title: 'Natpower Industrial Corporation Limited', text: 'Lusaka headquarters. Supply, dangerous-goods logistics and ZEMA-certified warehousing.' },
+        { pin: 2, eyebrow: 'South Africa', title: 'Natpower Industrial Corporation (Pty) Ltd', text: 'Kempton Park, Gauteng. Leads the group’s sulphuric acid supply partnership with a South African mining house.' },
       ],
     },
     {
@@ -520,11 +505,6 @@ export const investorDocuments: DocumentItem[] = [
   { id: 'regional-office', title: 'Regional Corporate Office Concept', issuer: 'Natpower Group', reference: 'South Africa', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower-Regional-Corporate-Office-Concept.pdf' },
 ];
 
-export const partnershipDocument = {
-  title: 'Natpower & Foskor Partnership Agreement',
-  url: 'http://natpower.org/wp-content/uploads/2026/10/Natpower-Foskor-Partnership-Agreement.pdf',
-};
-
 // ---------------------------------------------------------------------------
 // Clients
 // ---------------------------------------------------------------------------
@@ -547,13 +527,13 @@ export const newsSection = { eyebrow: 'News & Media', heading: 'Latest from the 
 /** Dates and locations are placeholders inferred from document upload dates. Confirm before launch. */
 export const news: NewsItem[] = [
   {
-    id: 'foskor',
+    id: 'acid-supply-partnership',
     date: 'October 2026',
-    location: 'South Africa',
-    title: 'Natpower & Foskor Partnership Agreement',
-    excerpt: 'The group has signed a partnership agreement with Foskor, strengthening long-term supply into the corridor.',
-    href: partnershipDocument.url,
-    image: { alt: 'Partnership signing', placeholderLabel: 'Photo: partnership signing' },
+    location: 'Kempton Park, South Africa',
+    title: 'Natpower Partners with Leading South African Mining House on Sulphuric Acid Supply',
+    excerpt:
+      'Natpower Industrial Corporation (Pty) Ltd has entered a toll-manufacturing partnership with a leading South African mining house. Natpower supplies sulphur and receives a share of the sulphuric acid produced, for supply to mining customers in Zambia, the DRC and Malawi.',
+    image: { alt: 'Sulphuric acid plant', placeholderLabel: 'Photo: sulphuric acid plant' },
   },
   {
     id: 'luse',
@@ -639,14 +619,15 @@ export const aboutPage = {
     heading: 'Supplying the industries that build Africa',
     lead: 'Two sister companies under the Natpower Group, working as one across the southern African corridor.',
     paragraphs: [
-      'The Natpower Group supplies sulphuric acid, granular sulphur and silica sand to mining houses in Zambia, the DRC and Malawi. Our clients include Konkola Copper Mines (Vedanta Resources) and Mimbula Minerals (Moxico Resources).',
-      'We control each stage of supply, from smelter source in South Africa to delivery on site, through compliant bulk dangerous-goods logistics. The group also provides mining services, including pit dewatering and acid converting plant support.',
+      'Natpower Industrial Corporation Limited, headquartered in Lusaka, Zambia, carries the group’s operating track record. It supplies sulphuric acid, granular sulphur and silica sand to Konkola Copper Mines (Vedanta Resources) and Mimbula Minerals (Moxico Resources), runs compliant dangerous-goods logistics and ZEMA-certified warehousing, and holds the group’s permits and licences.',
+      'Natpower Industrial Corporation (Pty) Ltd, based in Kempton Park, South Africa, leads the group’s sulphuric acid supply partnership with a South African mining house, for supply into Zambia, the DRC and Malawi.',
+      'Each company has its own shareholders, directors and executives, and the group draws on 35+ years of combined experience across our directors and shareholders.',
     ],
   },
   companies: {
     eyebrow: 'Our Companies',
     heading: 'Two sister companies',
-    intro: 'Natpower Industrial Corporation Limited (Zambia) and Natpower Industrial Corporation (Pty) Ltd (South Africa) are sister companies under the Natpower Group.',
+    intro: 'Natpower Industrial Corporation Limited (Zambia) and Natpower Industrial Corporation (Pty) Ltd (South Africa) are the two sister companies under the Natpower Group. One website serves both, and all enquiries go to info@natpower.org.',
   },
   principles: {
     eyebrow: 'What Guides Us',
@@ -657,18 +638,7 @@ export const aboutPage = {
       { title: 'Values', text: 'We build deep, long-term relationships. Our customers depend on us for their most critical projects, and we succeed only when they succeed.' },
     ],
   },
-  leadership: {
-    eyebrow: 'Leadership',
-    heading: 'Leadership team',
-    intro: '35+ years of combined leadership experience across mining supply, logistics and finance.',
-  },
 };
-
-export const leaders: Leader[] = Array.from({ length: 6 }, (_, i) => ({
-  name: `[Leader name ${i + 1}]`,
-  title: '[Job title]',
-  image: { alt: `Portrait of leader ${i + 1}`, placeholderLabel: 'Portrait photo' },
-}));
 
 // ---------------------------------------------------------------------------
 // Operations page

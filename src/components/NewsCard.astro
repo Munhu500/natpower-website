@@ -7,7 +7,7 @@ interface Props {
   item: NewsItem;
 }
 const { item } = Astro.props;
-const external = item.href.startsWith('http');
+const external = item.href?.startsWith('http') ?? false;
 ---
 
 <article class="card flex h-full flex-col" data-reveal>
@@ -21,18 +21,28 @@ const external = item.href.startsWith('http');
       {item.location}
     </p>
     <h3 class="mt-4 font-display text-[22px] font-semibold uppercase leading-[1.1] tracking-[0.02em]">
-      <a
-        href={item.href}
-        class="card-link"
-        target={external ? '_blank' : undefined}
-        rel={external ? 'noopener' : undefined}
-      >
-        {item.title}
-      </a>
+      {
+        item.href ? (
+          <a
+            href={item.href}
+            class="card-link"
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener' : undefined}
+          >
+            {item.title}
+          </a>
+        ) : (
+          item.title
+        )
+      }
     </h3>
     <p class="mt-4 text-[15px] text-muted">{item.excerpt}</p>
-    <span class="mt-auto pt-8 text-green-600" aria-hidden="true">
-      <Icon name="arrow-right" class="arrow" />
-    </span>
+    {
+      item.href && (
+        <span class="mt-auto pt-8 text-green-600" aria-hidden="true">
+          <Icon name="arrow-right" class="arrow" />
+        </span>
+      )
+    }
   </div>
 </article>

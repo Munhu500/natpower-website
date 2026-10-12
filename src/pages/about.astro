@@ -3,11 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import CompanyCard from '../components/CompanyCard.astro';
-import LeaderCard from '../components/LeaderCard.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { aboutPage, companies, leaders } from '../data/site';
+import { aboutPage, companies } from '../data/site';
 
-const { hero, overview, principles, leadership } = aboutPage;
+const { hero, overview, principles } = aboutPage;
 ---
 
 <BaseLayout title="About" description={overview.lead}>
@@ -51,14 +50,5 @@ const { hero, overview, principles, leadership } = aboutPage;
     </div>
   </section>
 
-  <section id="leadership" class="section bg-white" aria-labelledby="leadership-heading">
-    <div class="container-site">
-      <SectionHeading id="leadership-heading" eyebrow={leadership.eyebrow} heading={leadership.heading} intro={leadership.intro} />
-      <ul class="mt-14 grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3" data-reveal-group>
-        {leaders.map((l) => <LeaderCard leader={l} />)}
-      </ul>
-    </div>
-  </section>
-
-  <CtaBand background="white" />
+  <CtaBand />
 </BaseLayout>

@@ -14,7 +14,7 @@ Astro + Tailwind CSS v4 + TypeScript static site. **Layout only for now**: stati
 
 ## Project context
 
-The Natpower Group of Companies has two **sister** companies. They are not parent and subsidiary.
+The Natpower Group of Companies has two **sister** companies. They are not parent and subsidiary. They are the only two companies in the group, and each has its own shareholders, directors and executives.
 
 **Legal names:**
 1. Natpower Industrial Corporation Limited (Zambia)
@@ -26,13 +26,24 @@ The Natpower Group of Companies has two **sister** companies. They are not paren
 - The approved logo represents both companies.
 
 1. **Natpower Industrial Corporation Limited (NICL), Zambia**
+   - Role: the group's operating track record. Sulphuric acid, granular sulphur and silica sand supply to Konkola Copper Mines (Vedanta Resources) and Mimbula Minerals (Moxico Resources), dangerous-goods logistics, ZEMA-certified warehousing, and the permits and licences.
    - HQ: 1244 York Farm Road, Mariandale Estates, Makeni, Lusaka 10101, Zambia
    - Email: info@natpower.org
    - General enquiries: +260 774 939 719 / +260 961 984 357
    - Sales: +260 773 984 710
    - ZRA TPIN: 2003738214
 2. **Natpower Industrial Corporation (Pty) Ltd, South Africa**
-   - Based in Kempton Park, Gauteng. The full address and contacts are TBC; use clearly marked placeholders.
+   - Role: leads the group's sulphuric acid supply partnership with a South African mining house, for supply into Zambia, the DRC and Malawi.
+   - Location: Kempton Park, Gauteng, South Africa (no street address). Email: info@natpower.org. No phone number.
+
+**One site, shared contacts:** one website serves both companies (no per-company "Visit website" links). All enquiries go to info@natpower.org. The Zambian phone numbers appear on the Lusaka office only.
+
+**Sulphuric acid supply partnership:** a toll-manufacturing partnership between our South African company and a leading South African mining house. Natpower supplies sulphur and receives a share of the sulphuric acid produced, for supply to mining customers in Zambia, the DRC and Malawi.
+- Never name the counterparty. Refer to it only as "a leading South African mining house".
+- Never publish the partnership agreement or link to it.
+- Never mention financiers, funding, interest or investors in connection with the partnership.
+
+**People:** do not name any directors or executives anywhere on the site. There is no Leadership section.
 
 **Core business:** Supply of sulphuric acid (98–98.5%), granular sulphur (99.5–99.8% elemental) and silica sand/grit (smelter flux) to mining houses in Zambia, the DRC and Malawi. The group also runs compliant bulk dangerous-goods logistics (specialised acid tankers) and provides mining services (e.g. pit dewatering, acid converting plant support).
 
@@ -57,7 +68,6 @@ The Natpower Group of Companies has two **sister** companies. They are not paren
 **Values:** Deep, long-term relationships; customers depend on us for their most critical projects; we succeed only when our customers succeed.
 
 **Existing document URLs** (use as Download link targets):
-- Foskor Partnership Agreement: http://natpower.org/wp-content/uploads/2026/10/Natpower-Foskor-Partnership-Agreement.pdf
 - ITAC EXP2026/62348: http://natpower.org/wp-content/uploads/2026/07/62348.pdf
 - ITAC EXP2026/58863: http://natpower.org/wp-content/uploads/2026/07/58863.pdf
 - ITAC EXP2025/47633: http://natpower.org/wp-content/uploads/2026/07/47633.pdf
@@ -157,6 +167,6 @@ All text must meet WCAG AA contrast. Gold is never used for body text.
 ## Copy rules
 
 - Always describe the companies as "sister companies under the Natpower Group". Never use "parent", "subsidiary" or "holding company".
-- For experience claims, write "35+ years of combined leadership experience". Never attribute years of experience to the companies themselves.
+- For experience claims, write "35+ years of combined experience across our directors and shareholders". Never attribute years of experience to the companies themselves, and never display company registration years. (The stats band label is kept as is by request.)
 - Tone: confident, institutional and concise. Use British/South African spelling.
 - Fix all typos from the old site ("Mision", "Eelemental", "bu product", "complaince", "insure"). Remove duplicated copy; Vision and Values must not repeat the About text.

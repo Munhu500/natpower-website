@@ -1,7 +1,6 @@
 ---
 import Logo from './Logo.astro';
-import Icon from './Icon.astro';
-import { ui, type Company } from '../data/site';
+import type { Company } from '../data/site';
 
 interface Props {
   company: Company;
@@ -15,11 +14,4 @@ const { company } = Astro.props;
   <h3 class="text-h3 mt-5">{company.legalName}</h3>
   <p class="mt-2 text-[15px] text-muted">{company.location}</p>
   <p class="prose-measure mt-6">{company.role}</p>
-  <div class="mt-auto pt-10">
-    <a href={company.href} class="link-arrow" aria-disabled={company.hrefPlaceholder ? 'true' : undefined}>
-      {ui.visit}
-      <span class="sr-only">: {company.legalName}</span>
-      <Icon name="arrow-right" size={18} />
-    </a>
-  </div>
 </article>

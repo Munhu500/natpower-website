@@ -44,30 +44,25 @@ const linkClass = 'text-ivory/70 transition-colors duration-[250ms] hover:text-i
                   </>
                 ))}
               </p>
-              {office.email &&
-                (office.placeholder ? (
-                  <p>{office.email}</p>
-                ) : (
-                  <p>
-                    <a href={`mailto:${office.email}`} class={linkClass}>
-                      {office.email}
-                    </a>
-                  </p>
-                ))}
-              <ul class="space-y-1">
-                {office.phones.map((p) => (
-                  <li>
-                    {office.placeholder ? (
-                      p.value
-                    ) : (
+              {office.email && (
+                <p>
+                  <a href={`mailto:${office.email}`} class={linkClass}>
+                    {office.email}
+                  </a>
+                </p>
+              )}
+              {office.phones.length > 0 && (
+                <ul class="space-y-1">
+                  {office.phones.map((p) => (
+                    <li>
                       <a href={`tel:${p.value.replace(/\s/g, '')}`} class={linkClass}>
                         {p.value}
                       </a>
-                    )}
-                    <span class="sr-only"> ({p.label})</span>
-                  </li>
-                ))}
-              </ul>
+                      <span class="sr-only"> ({p.label})</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </address>
           </div>
         ))

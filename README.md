@@ -24,7 +24,7 @@ On Vercel, use the Astro framework preset: build command `npm run build`, output
 | `npm run package:preview` | Preview build + zip the contents of `dist/` to `deploy/natpower-preview.zip` |
 
 - Upload the zip to the web root of the preview host and extract it there. `index.html`, `.htaccess` and `robots.txt` sit at the zip root.
-- `site` in `astro.config.mjs` defaults to `https://preview.yourdomain.com` (used for canonical and og:image URLs). Override with `SITE_URL=https://… npm run package:preview`.
+- `site` in `astro.config.mjs` defaults to `https://lm-softwaresolutions.com` (used for canonical and og:image URLs). Override with `SITE_URL=https://… npm run package:preview`.
 - `PUBLIC_NOINDEX=true` adds `<meta name="robots" content="noindex, nofollow">` to every page and outputs a `robots.txt` with `Disallow: /`. Unset (the launch build) is indexable.
 - `public/.htaccess`: custom 404, HTTPS redirect, gzip, 1-year immutable caching for images, `no-cache` for HTML. `public/_astro/.htaccess` gives hashed build assets 1-year immutable caching.
 - For the real launch: `SITE_URL=https://natpower.org npm run build` (no `PUBLIC_NOINDEX`).
@@ -57,14 +57,6 @@ The approved logo is `src/assets/natpower-logo.png` (transparent PNG). It is fin
 
 Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 
-### Kempton Park office (Natpower Industrial Corporation (Pty) Ltd, South Africa)
-- Street address, suburb and postal code
-- Email
-- General and sales phone numbers
-
-### Company links
-- "Visit website" links for both companies (currently `#`)
-
 ### Photography (every image is a labelled placeholder)
 - Home hero: 4 slides (acid plant / mine site, tanker fleet, Lusaka / Kempton Park, Copperbelt landscape)
 - Who We Are: textured granular sulphur close-up
@@ -76,9 +68,6 @@ Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 - Inner page heroes: About, Operations, Diversified Interests, Compliance, Investors, News & Media, Contact
 - Operations page: tanker fleet, pit dewatering
 - Gallery: 6 images
-
-### Leadership
-- 6 leaders: names, job titles and portrait photos
 
 ### Clients
 - Konkola Copper Mines and Mimbula Minerals logos (Trusted By strip)

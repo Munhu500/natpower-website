@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   // Absolute base for canonical and og:image URLs. Defaults to the preview host;
   // set SITE_URL=https://natpower.org for the real launch.
-  site: process.env.SITE_URL ?? 'https://preview.yourdomain.com',
+  site: process.env.SITE_URL ?? 'https://lm-softwaresolutions.com',
   output: 'static',
   trailingSlash: 'ignore',
   // Inline the (small) stylesheet so it doesn't block first paint

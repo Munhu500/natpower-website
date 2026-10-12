@@ -28,32 +28,36 @@ const { office } = Astro.props;
       office.email && (
         <p class="flex gap-4">
           <Icon name="mail" class="mt-0.5 shrink-0 text-gold-500" />
-          {office.placeholder ? <span>{office.email}</span> : <a href={`mailto:${office.email}`} class="link-inline">{office.email}</a>}
+          <a href={`mailto:${office.email}`} class="link-inline">{office.email}</a>
         </p>
       )
     }
-    <div class="flex gap-4">
-      <Icon name="phone" class="mt-0.5 shrink-0 text-gold-500" />
-      <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
-        {
-          office.phones.map((p) => (
-            <>
-              <dt class="text-[15px] text-muted">{p.label}</dt>
-              <dd>
-                {office.placeholder ? p.value : <a href={`tel:${p.value.replace(/\s/g, '')}`} class="link-inline">{p.value}</a>}
-              </dd>
-            </>
-          ))
-        }
-        {
-          office.registration?.map((r) => (
-            <>
-              <dt class="text-[15px] text-muted">{r.label}</dt>
-              <dd>{r.value}</dd>
-            </>
-          ))
-        }
-      </dl>
-    </div>
+    {
+      (office.phones.length > 0 || office.registration) && (
+        <div class="flex gap-4">
+          <Icon name="phone" class="mt-0.5 shrink-0 text-gold-500" />
+          <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+            {
+              office.phones.map((p) => (
+                <>
+                  <dt class="text-[15px] text-muted">{p.label}</dt>
+                  <dd>
+                    <a href={`tel:${p.value.replace(/\s/g, '')}`} class="link-inline">{p.value}</a>
+                  </dd>
+                </>
+              ))
+            }
+            {
+              office.registration?.map((r) => (
+                <>
+                  <dt class="text-[15px] text-muted">{r.label}</dt>
+                  <dd>{r.value}</dd>
+                </>
+              ))
+            }
+          </dl>
+        </div>
+      )
+    }
   </address>
 </article>
