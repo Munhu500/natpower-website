@@ -2,9 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { getImage } from 'astro:assets';
-import logoMark from '../assets/natpower-logo.png';
-import { group, seo, ui } from '../data/site';
+import { seo, ui } from '../data/site';
 
 interface Props {
   title?: string;
@@ -15,9 +13,8 @@ const { title, description = seo.defaultDescription } = Astro.props;
 const fullTitle = title ? `${title}${seo.titleSuffix}` : seo.defaultTitle;
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap';
-// Default Open Graph image: the approved logo at 1024px
-const ogImage = await getImage({ src: logoMark, width: 1024, height: 1024, format: 'png' });
-const ogImageUrl = new URL(ogImage.src, Astro.site);
+// Default Open Graph share card (1200×630). Template: scripts/og/og-card.html
+const ogImageUrl = new URL(seo.ogImage.src, Astro.site);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -37,12 +34,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1024" />
-    <meta property="og:image:height" content="1024" />
-    <meta property="og:image:alt" content={group.logo.alt} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(seo.ogImage.width)} />
+    <meta property="og:image:height" content={String(seo.ogImage.height)} />
+    <meta property="og:image:alt" content={seo.ogImage.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={seo.ogImage.alt} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href={fontsHref} />

@@ -16,12 +16,12 @@ const linkClass = 'text-ivory/70 transition-colors duration-[250ms] hover:text-i
 
       <div class="lg:col-span-2">
         <h2 class="eyebrow">{ui.footerColumns.companies}</h2>
-        <ul class="mt-6 space-y-4 text-[15px]">
+        <ul class="mt-6 space-y-5 text-[15px]">
           {
             companies.map((c) => (
               <li>
-                <span class="block text-ivory">{c.legalName}</span>
-                <span class="block text-ivory/70">{c.country}</span>
+                <span class="block text-[11px] font-semibold uppercase tracking-[0.18em] text-gold-300">{c.country}</span>
+                <span class="mt-1 block text-ivory">{c.legalName}</span>
               </li>
             ))
           }
@@ -33,6 +33,9 @@ const linkClass = 'text-ivory/70 transition-colors duration-[250ms] hover:text-i
           <div class="lg:col-span-2">
             <h2 class="eyebrow">{office.name}</h2>
             <address class="mt-6 space-y-3 text-[15px] not-italic text-ivory/70">
+              <p class="text-ivory">
+                {office.company}, {office.country}
+              </p>
               <p>
                 {office.addressLines.map((line) => (
                   <>

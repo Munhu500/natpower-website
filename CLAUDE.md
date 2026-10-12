@@ -9,11 +9,20 @@ Astro + Tailwind CSS v4 + TypeScript static site. **Layout only for now**: stati
 - Design tokens live in `src/styles/global.css` (`@theme`). The default Tailwind palette is removed on purpose: only brand tokens exist.
 - `gold-700` (`#86682B`) is an implementation-only, text-only token for small gold labels on light backgrounds. `gold-500` on ivory is 3.17:1 and fails WCAG AA for 12px text. Rules, underlines and icons still use `gold-500`.
 - Images: `Media.astro` renders a photo when `src` is set, otherwise a labelled stone placeholder.
-- Logo: the approved, final logo is `src/assets/natpower-logo.png`. Use it as-is; never redraw, recolour or add effects to it. `Logo.astro` renders it via Astro `<Picture>` (AVIF/WebP). Sizes: header 56px (48px scrolled and on mobile), footer 64px, company cards 72px. Favicons in `public/` are generated from it, and it is the default Open Graph image.
+- Logo: the approved, final logo is `src/assets/natpower-logo.png`. Use it as-is; never redraw, recolour or add effects to it. `Logo.astro` renders it via Astro `<Picture>` (AVIF/WebP). Sizes: header 56px (48px scrolled and on mobile), footer 64px, company cards 72px. Favicons in `public/` are generated from it. The default Open Graph image is the share card `public/og/natpower-og.jpg` (1200×630, under 150KB; template `scripts/og/og-card.html`).
 
 ## Project context
 
 The Natpower Group of Companies has two **sister** companies. They are not parent and subsidiary.
+
+**Legal names:**
+1. Natpower Industrial Corporation Limited (Zambia)
+2. Natpower Industrial Corporation (Pty) Ltd (South Africa)
+
+**Always pair each company with its country.** The two legal names are nearly identical, so the country must accompany the company name wherever it appears (company cards, footer, office cards, mega-menu, map lists, running copy):
+- On cards and office blocks, put an eyebrow label above the name: "ZAMBIA" or "SOUTH AFRICA" (gold-700 for small text on light backgrounds, gold-300 on dark).
+- In running text, after the first full mention, use "our Zambian company" / "our South African company".
+- The approved logo represents both companies.
 
 1. **Natpower Industrial Corporation Limited (NICL), Zambia**
    - HQ: 1244 York Farm Road, Mariandale Estates, Makeni, Lusaka 10101, Zambia
@@ -21,7 +30,7 @@ The Natpower Group of Companies has two **sister** companies. They are not paren
    - General enquiries: +260 774 939 719 / +260 961 984 357
    - Sales: +260 773 984 710
    - ZRA TPIN: 2003738214
-2. **Natpower (Pty) Ltd, South Africa**
+2. **Natpower Industrial Corporation (Pty) Ltd, South Africa**
    - Based in Kempton Park, Gauteng. The full address and contacts are TBC; use clearly marked placeholders.
 
 **Core business:** Supply of sulphuric acid (98–98.5%), granular sulphur (99.5–99.8% elemental) and silica sand/grit (smelter flux) to mining houses in Zambia, the DRC and Malawi. The group also runs compliant bulk dangerous-goods logistics (specialised acid tankers) and provides mining services (e.g. pit dewatering, acid converting plant support).

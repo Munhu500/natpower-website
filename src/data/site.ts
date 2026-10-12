@@ -33,6 +33,8 @@ export interface Office {
   id: string;
   name: string;
   company: string;
+  /** Always shown with the company name: the two legal names are nearly identical. */
+  country: string;
   addressLines: string[];
   email?: string;
   phones: { label: string; value: string }[];
@@ -117,7 +119,7 @@ export interface OperationsTab {
   id: string;
   label: string;
   intro: string;
-  items: { pin: number; title: string; text: string }[];
+  items: { pin: number; eyebrow?: string; title: string; text: string }[];
 }
 
 export interface Leader {
@@ -153,6 +155,12 @@ export const group = {
 export const seo = {
   defaultTitle: 'Natpower Group — Industrial Chemicals for Africa’s Mines',
   titleSuffix: ' — Natpower Group',
+  ogImage: {
+    src: '/og/natpower-og.jpg',
+    width: 1200,
+    height: 630,
+    alt: 'Natpower Group: industrial chemicals and mining supply across Southern Africa',
+  },
   defaultDescription:
     'The Natpower Group supplies sulphuric acid, granular sulphur and silica sand to mining houses in Zambia, the DRC and Malawi, supported by compliant dangerous-goods logistics.',
 };
@@ -174,8 +182,8 @@ export const companies: Company[] = [
   },
   {
     id: 'natpower-sa',
-    shortName: 'Natpower (Pty) Ltd',
-    legalName: 'Natpower (Pty) Ltd',
+    shortName: 'Natpower Industrial Corporation (Pty) Ltd',
+    legalName: 'Natpower Industrial Corporation (Pty) Ltd',
     country: 'South Africa',
     location: 'Kempton Park, Gauteng',
     role: 'Regional sourcing, export permitting and corridor coordination from South Africa.',
@@ -189,6 +197,7 @@ export const offices: Office[] = [
     id: 'lusaka',
     name: 'Lusaka Office',
     company: 'Natpower Industrial Corporation Limited',
+    country: 'Zambia',
     addressLines: ['1244 York Farm Road', 'Mariandale Estates, Makeni', 'Lusaka 10101, Zambia'],
     email: 'info@natpower.org',
     phones: [
@@ -201,7 +210,8 @@ export const offices: Office[] = [
   {
     id: 'kempton-park',
     name: 'Kempton Park Office',
-    company: 'Natpower (Pty) Ltd',
+    company: 'Natpower Industrial Corporation (Pty) Ltd',
+    country: 'South Africa',
     addressLines: ['[Street address TBC]', '[Suburb TBC], Kempton Park', 'Gauteng [Postal code TBC], South Africa'],
     email: '[Email TBC]',
     phones: [
@@ -222,7 +232,7 @@ export const nav: NavItem[] = [
     href: '/about',
     children: [
       { label: 'Natpower Group', href: '/about#group', description: 'Who we are and what we stand for' },
-      { label: 'Our Companies', href: '/about#companies', description: 'Two sister companies, one group' },
+      { label: 'Our Companies', href: '/about#companies', description: 'Natpower Industrial Corporation in Zambia and South Africa' },
       { label: 'Leadership', href: '/about#leadership', description: 'The team guiding the group' },
     ],
     featured: {
@@ -335,7 +345,7 @@ export const whoWeAre = {
   lead: 'We believe in the future of Africa, and we are proud to help shape it.',
   paragraphs: [
     'The Natpower Group supplies the industrial chemicals that keep southern and central Africa’s mines in production. We deliver sulphuric acid, granular sulphur and silica sand to mining houses in Zambia, the DRC and Malawi, backed by compliant bulk dangerous-goods logistics and specialist mining services.',
-    'The group brings together two sister companies: Natpower Industrial Corporation Limited in Lusaka, Zambia, and Natpower (Pty) Ltd in Kempton Park, South Africa. Together they manage the full corridor from source to site, guided by 35+ years of combined leadership experience.',
+    'The group brings together two sister companies: Natpower Industrial Corporation Limited in Lusaka, Zambia, and Natpower Industrial Corporation (Pty) Ltd in Kempton Park, South Africa. Together our Zambian and South African companies manage the full corridor from source to site, guided by 35+ years of combined leadership experience.',
   ],
   link: { label: 'About the group', href: '/about' },
   image: { alt: 'Close detail of granular sulphur', placeholderLabel: 'Textured photo: granular sulphur close-up' } as ImageRef,
@@ -370,8 +380,8 @@ export const operationsSection = {
       label: 'Our Companies',
       intro: 'Two sister companies operating either end of the corridor.',
       items: [
-        { pin: 4, title: 'Natpower Industrial Corporation Limited', text: 'Headquarters in Makeni, Lusaka. Sales, distribution and mining services.' },
-        { pin: 2, title: 'Natpower (Pty) Ltd', text: 'Kempton Park, Gauteng. Regional sourcing and export coordination.' },
+        { pin: 4, eyebrow: 'Zambia', title: 'Natpower Industrial Corporation Limited', text: 'Headquarters in Makeni, Lusaka. Sales, distribution and mining services.' },
+        { pin: 2, eyebrow: 'South Africa', title: 'Natpower Industrial Corporation (Pty) Ltd', text: 'Kempton Park, Gauteng. Regional sourcing and export coordination.' },
       ],
     },
     {
@@ -505,8 +515,8 @@ export const documents: DocumentItem[] = [
 ];
 
 export const investorDocuments: DocumentItem[] = [
-  { id: 'luse-listing', title: 'LuSE Listing Prospectus', issuer: 'Natpower Zambia', reference: 'Lusaka Stock Exchange', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower-Zambia-LuSE-Listing-Prospectus.pdf' },
-  { id: 'luse-ipo', title: 'LuSE IPO Investor Prospectus', issuer: 'Natpower Zambia', reference: 'Initial public offering', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower_Zambia_LuSE_IPO_Investor_Prospectus.pdf' },
+  { id: 'luse-listing', title: 'LuSE Listing Prospectus', issuer: 'Natpower Industrial Corporation Limited, Zambia', reference: 'Lusaka Stock Exchange', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower-Zambia-LuSE-Listing-Prospectus.pdf' },
+  { id: 'luse-ipo', title: 'LuSE IPO Investor Prospectus', issuer: 'Natpower Industrial Corporation Limited, Zambia', reference: 'Initial public offering', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower_Zambia_LuSE_IPO_Investor_Prospectus.pdf' },
   { id: 'regional-office', title: 'Regional Corporate Office Concept', issuer: 'Natpower Group', reference: 'South Africa', category: 'investor', url: 'http://natpower.org/wp-content/uploads/2026/07/Natpower-Regional-Corporate-Office-Concept.pdf' },
 ];
 
@@ -550,7 +560,7 @@ export const news: NewsItem[] = [
     date: 'July 2026',
     location: 'Lusaka, Zambia',
     title: 'Natpower pursues Lusaka Stock Exchange listing',
-    excerpt: 'Natpower Zambia has published its LuSE listing and IPO investor prospectuses.',
+    excerpt: 'Natpower Industrial Corporation Limited, our Zambian company, has published its LuSE listing and IPO investor prospectuses.',
     href: '/investors',
     image: { alt: 'Lusaka city centre', placeholderLabel: 'Photo: Lusaka / LuSE' },
   },
@@ -636,7 +646,7 @@ export const aboutPage = {
   companies: {
     eyebrow: 'Our Companies',
     heading: 'Two sister companies',
-    intro: 'Natpower Industrial Corporation Limited and Natpower (Pty) Ltd are sister companies under the Natpower Group.',
+    intro: 'Natpower Industrial Corporation Limited (Zambia) and Natpower Industrial Corporation (Pty) Ltd (South Africa) are sister companies under the Natpower Group.',
   },
   principles: {
     eyebrow: 'What Guides Us',
@@ -729,7 +739,7 @@ export const investorsPage = {
   overview: {
     eyebrow: 'LuSE Listing',
     heading: 'Investing in the corridor',
-    lead: 'Natpower Zambia is pursuing a listing on the Lusaka Stock Exchange.',
+    lead: 'Natpower Industrial Corporation Limited, our Zambian company, is pursuing a listing on the Lusaka Stock Exchange.',
     paragraphs: [
       'The listing will give investors access to a growing supplier of essential industrial chemicals to the Zambian, Congolese and Malawian mining sectors.',
       'The prospectuses below set out the offer, the group’s operations and its growth strategy, including the proposed regional corporate office in South Africa.',

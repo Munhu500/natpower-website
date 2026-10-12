@@ -38,13 +38,13 @@ The approved logo is `src/assets/natpower-logo.png` (transparent PNG). It is fin
 - `Logo.astro` renders it with Astro `<Picture>` (AVIF and WebP, 1x and 2x, explicit width and height).
 - Sizes: header 56px (48px when scrolled and on mobile), mobile menu 48px, footer 64px, company cards and 404 72px.
 - `public/favicon-32.png` and `public/apple-touch-icon.png` (180px, on ivory because iOS renders transparency as black) are generated from it.
-- It is the default Open Graph image, output at 1024px by `BaseLayout.astro`.
+- The default Open Graph / Twitter image is the share card `public/og/natpower-og.jpg` (1200×630 JPG, under 150KB), rendered from `scripts/og/og-card.html`.
 
 ## Placeholders that need real content
 
 Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 
-### Kempton Park office (Natpower (Pty) Ltd)
+### Kempton Park office (Natpower Industrial Corporation (Pty) Ltd, South Africa)
 - Street address, suburb and postal code
 - Email
 - General and sales phone numbers
