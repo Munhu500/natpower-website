@@ -1,0 +1,38 @@
+---
+import ArticleMedia from './ArticleMedia.astro';
+import Icon from './Icon.astro';
+import { newsPage } from '../data/site';
+import { articleHref, categorySlug, formatDate, isoDate, type Article } from '../lib/news';
+
+interface Props {
+  article: Article;
+}
+const { article } = Astro.props;
+const { title, date, location, category, standfirst } = article.data;
+---
+
+<article
+  class="card grid overflow-hidden lg:grid-cols-12"
+  data-category={categorySlug(category)}
+  aria-label={newsPage.featuredLabel}
+  data-reveal
+>
+  <div class="card-media aspect-[3/2] lg:col-span-7">
+    <ArticleMedia article={article} loading="eager" sizes="(min-width: 1024px) 58vw, 100vw" />
+  </div>
+  <div class="flex flex-col justify-center p-8 md:p-12 lg:col-span-5">
+    <p class="eyebrow">{category}</p>
+    <p class="mt-5 text-[14px] text-muted">
+      <time datetime={isoDate(date)}>{formatDate(date)}</time>
+      <span aria-hidden="true" class="mx-1.5">·</span>
+      {location}
+    </p>
+    <h2 class="mt-4 text-[clamp(1.5rem,1.2rem+0.9vw,2.125rem)]">{title}</h2>
+    <p class="mt-6 text-muted">{standfirst}</p>
+    <a href={articleHref(article)} class="link-arrow card-link mt-10 self-start">
+      {newsPage.readArticle}
+      <span class="sr-only">: {title}</span>
+      <Icon name="arrow-right" size={18} />
+    </a>
+  </div>
+</article>

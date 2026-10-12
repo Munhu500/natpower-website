@@ -7,7 +7,7 @@ import { compliancePage, documentCategories, documents } from '../data/site';
   <div role="group" aria-label={compliancePage.filterLabel} class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
     {
       documentCategories.map((c, i) => (
-        <button type="button" class="doc-filter btn min-h-11 shrink-0 px-5" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={c.id}>
+        <button type="button" class="filter-tab btn min-h-11 shrink-0 px-5" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={c.id}>
           {c.label}
           <span class="text-[11px] opacity-70">
             {c.id === 'all' ? documents.length : documents.filter((d) => d.category === c.id).length}
@@ -21,22 +21,6 @@ import { compliancePage, documentCategories, documents } from '../data/site';
     {documents.map((d) => <DocumentCard doc={d} />)}
   </ul>
 </div>
-
-<style>
-  .doc-filter {
-    border-color: var(--color-stone);
-    color: var(--color-ink);
-    background: var(--color-white);
-  }
-  .doc-filter:hover {
-    border-color: var(--color-green-600);
-  }
-  .doc-filter[aria-pressed='true'] {
-    background: var(--color-green-600);
-    border-color: var(--color-green-600);
-    color: var(--color-ivory);
-  }
-</style>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-doc-library]').forEach((lib) => {

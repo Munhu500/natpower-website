@@ -1,0 +1,35 @@
+---
+/**
+ * An article's image, or a labelled placeholder until one is added
+ * via the `image` frontmatter field.
+ */
+import { Image } from 'astro:assets';
+import Media from './Media.astro';
+import { articleImagePlaceholders } from '../data/site';
+import type { Article } from '../lib/news';
+
+interface Props {
+  article: Article;
+  tone?: 'light' | 'dark';
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+}
+const { article, tone = 'light', loading = 'lazy', sizes = '(min-width: 1024px) 33vw, 100vw' } = Astro.props;
+const { image, imageAlt, title } = article.data;
+const label = articleImagePlaceholders[article.id] ?? title;
+---
+
+{
+  image ? (
+    <Image
+      src={image}
+      alt={imageAlt ?? ''}
+      widths={[480, 800, 1200, 1600]}
+      sizes={sizes}
+      loading={loading}
+      class="block h-full w-full object-cover"
+    />
+  ) : (
+    <Media image={{ alt: imageAlt ?? label, placeholderLabel: label }} tone={tone} loading={loading} />
+  )
+}

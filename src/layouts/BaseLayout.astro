@@ -7,14 +7,27 @@ import { seo, ui } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
+  /** "article" for news articles; adds article:published_time. */
+  ogType?: 'website' | 'article';
+  publishedTime?: Date;
+  /** Absolute image URL for og:image; defaults to the share card. */
+  ogImage?: { url: string; width: number; height: number; alt: string; type: string };
+  /** Structured data, emitted as JSON-LD. */
+  jsonLd?: Record<string, unknown>;
 }
 
-const { title, description = seo.defaultDescription } = Astro.props;
+const { title, description = seo.defaultDescription, ogType = 'website', publishedTime, jsonLd } = Astro.props;
 const fullTitle = title ? `${title}${seo.titleSuffix}` : seo.defaultTitle;
 const fontsHref =
   'https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@1,6..72,400&display=swap';
 // Default Open Graph share card (1200×630). Template: scripts/og/og-card.html
-const ogImageUrl = new URL(seo.ogImage.src, Astro.site);
+const og = Astro.props.ogImage ?? {
+  url: new URL(seo.ogImage.src, Astro.site).href,
+  width: seo.ogImage.width,
+  height: seo.ogImage.height,
+  alt: seo.ogImage.alt,
+  type: 'image/jpeg',
+};
 // PUBLIC_NOINDEX=true (preview builds) keeps every page out of search engines
 const noindex = import.meta.env.PUBLIC_NOINDEX === 'true';
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -32,18 +45,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="theme-color" content="#0A2213" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content={String(seo.ogImage.width)} />
-    <meta property="og:image:height" content={String(seo.ogImage.height)} />
-    <meta property="og:image:alt" content={seo.ogImage.alt} />
+    <meta property="og:image" content={og.url} />
+    <meta property="og:image:type" content={og.type} />
+    <meta property="og:image:width" content={String(og.width)} />
+    <meta property="og:image:height" content={String(og.height)} />
+    <meta property="og:image:alt" content={og.alt} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content={seo.ogImage.alt} />
+    <meta name="twitter:image" content={og.url} />
+    <meta name="twitter:image:alt" content={og.alt} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href={fontsHref} />

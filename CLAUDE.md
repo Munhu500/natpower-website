@@ -7,6 +7,23 @@ Astro + Tailwind CSS v4 + TypeScript static site. **Layout only for now**: stati
 - `npm run dev` / `npm run build` / `npm run check` (astro check must stay at 0 errors).
 - Preview hosting (Apache/Hostinger): `npm run package:preview` builds with `PUBLIC_NOINDEX=true` and zips `dist/` contents to `deploy/natpower-preview.zip`. `site` defaults to the preview URL; set `SITE_URL` for other hosts. Never ship a launch build with `PUBLIC_NOINDEX=true`.
 - ALL copy and data live in `src/data/site.ts`. Never hardcode copy in components.
+- **News articles** live in the `news` content collection, one Markdown file per article in `src/content/news/`. Pages are built automatically: `/news/` (featured article, category tabs, grid, media gallery) and `/news/<slug>/`. The Home page shows the three newest.
+
+  **To add a post:** create `src/content/news/<slug>.md` with this frontmatter and a Markdown body. Nothing else is needed.
+  ```
+  ---
+  title: "Article title"
+  slug: "article-slug"           # becomes /news/article-slug/
+  date: 2026-11-01
+  location: "Lusaka, Zambia"
+  category: "Company News"       # Company News | Compliance | Investors
+  standfirst: "One- or two-sentence summary."
+  featured: false                # true pins it as the featured article on /news/
+  # image: ./images/photo.jpg    # optional; relative to the .md file
+  # imageAlt: "Description of the photo"
+  ---
+  ```
+  The schema (`src/content.config.ts`) is validated at build, so a bad category or missing field fails the build. Until an article has an `image`, it shows a stone placeholder labelled from `articleImagePlaceholders` in `site.ts`. Use `##` for subheadings. Articles may link to `/compliance/` or `/investors/` but never directly to a PDF; documents live only on those two pages.
 - Design tokens live in `src/styles/global.css` (`@theme`). The default Tailwind palette is removed on purpose: only brand tokens exist.
 - `gold-700` (`#86682B`) is an implementation-only, text-only token for small gold labels on light backgrounds. `gold-500` on ivory is 3.17:1 and fails WCAG AA for 12px text. Rules, underlines and icons still use `gold-500`.
 - Images: `Media.astro` renders a photo when `src` is set, otherwise a labelled stone placeholder.

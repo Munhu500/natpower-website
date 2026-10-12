@@ -1,0 +1,48 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Media from './Media.astro';
+import Icon from './Icon.astro';
+import { gallery, newsPage, ui } from '../data/site';
+---
+
+<section id="gallery" class="section scroll-mt-16 bg-white" aria-labelledby="gallery-heading">
+  <div class="container-site">
+    <SectionHeading id="gallery-heading" eyebrow={newsPage.gallery.eyebrow} heading={newsPage.gallery.heading} />
+    <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+      {
+        gallery.map((g, i) => (
+          <li data-reveal>
+            <figure class="card group">
+              {/* Lightbox trigger: layout only, not wired yet */}
+              <button type="button" class="block w-full text-left" aria-label={`View image: ${g.caption}`} data-lightbox-index={i}>
+                <div class="card-media aspect-[3/2]">
+                  <Media image={g.image} />
+                </div>
+              </button>
+              <figcaption class="p-5 text-[15px] text-muted">{g.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<!-- Lightbox layout (not wired up yet). Remove `hidden` to preview. -->
+<div class="on-dark fixed inset-0 z-[70] flex flex-col bg-green-950/95 text-ivory" role="dialog" aria-modal="true" aria-label="Gallery" hidden data-lightbox>
+  <div class="container-site flex h-[72px] items-center justify-between">
+    <p class="font-display text-[15px] font-semibold tracking-[0.12em] text-gold-300">01 / {String(gallery.length).padStart(2, '0')}</p>
+    <button type="button" class="inline-flex h-12 w-12 items-center justify-center">
+      <Icon name="x" size={28} />
+      <span class="sr-only">{ui.close}</span>
+    </button>
+  </div>
+  <div class="container-site flex flex-1 items-center gap-4 pb-10">
+    <button type="button" class="hero-arrow hidden sm:inline-flex"><Icon name="arrow-left" size={20} /><span class="sr-only">{ui.previousSlide}</span></button>
+    <figure class="mx-auto w-full max-w-5xl">
+      <div class="aspect-[3/2]"><Media image={gallery[0].image} tone="dark" /></div>
+      <figcaption class="mt-4 text-ivory/70">{gallery[0].caption}</figcaption>
+    </figure>
+    <button type="button" class="hero-arrow hidden sm:inline-flex"><Icon name="arrow-right" size={20} /><span class="sr-only">{ui.nextSlide}</span></button>
+  </div>
+</div>

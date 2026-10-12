@@ -11,6 +11,8 @@ export default defineConfig({
   trailingSlash: 'ignore',
   // Inline the (small) stylesheet so it doesn't block first paint
   build: { inlineStylesheets: 'always' },
+  // News & Media moved to /news/ (articles live in src/content/news/)
+  redirects: { '/news-media': '/news/' },
   vite: {
     plugins: [tailwindcss()],
   },

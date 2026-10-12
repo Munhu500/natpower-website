@@ -12,6 +12,11 @@ DirectoryIndex index.html
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
+# Old News & Media URL
+<IfModule mod_alias.c>
+  RedirectMatch 301 ^/news-media/?$ /news/
+</IfModule>
+
 # MIME types older servers may not know
 <IfModule mod_mime.c>
   AddType image/avif .avif

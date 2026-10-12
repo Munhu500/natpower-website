@@ -33,13 +33,16 @@ On Vercel, use the Astro framework preset: build command `npm run build`, output
 
 ```
 src/
-  data/site.ts        All copy, contacts, nav, stats, products, documents, news (typed)
+  data/site.ts        All copy, contacts, nav, stats, products, documents (typed)
+  content/news/       News articles, one Markdown file each (see CLAUDE.md)
+  content.config.ts   News frontmatter schema
+  lib/news.ts         Article sorting, dates and category helpers
   data/map.ts         Simplified country outlines for the Operations map
   styles/global.css   Design tokens (@theme) and shared component classes
   layouts/BaseLayout.astro
   components/         One component per section or element
   pages/              index, about, operations, diversified-interests,
-                      compliance, investors, news-media, contact, 404
+                      compliance, investors, news/ (index + [slug]), contact, 404
   scripts/reveal.ts   Scroll-reveal observer
   assets/             Approved logo (natpower-logo.png) and images
 ```
@@ -63,7 +66,7 @@ Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 - Products: acid storage tanks, sulphur in one-ton bags, silica sand stockpile
 - Compliance band: hazmat placard on tanker
 - CTA band: mine site at dusk
-- News: 3 card images
+- News articles: 4 images (one per article; add with the `image` frontmatter field)
 - Mega-menu featured images: 3
 - Inner page heroes: About, Operations, Diversified Interests, Compliance, Investors, News & Media, Contact
 - Operations page: tanker fleet, pit dewatering
@@ -74,8 +77,6 @@ Search for `TBC`, `TODO` and `placeholderLabel` in `src/`.
 
 ### Content to confirm
 - **Gallery captions:** written as stand-ins because the old site's gallery could not be reached. Replace them with the old captions, typos fixed.
-- **News dates and locations:** inferred from document upload paths (Oct 2026 / Jul 2026). Confirm before launch.
-- **News excerpts:** short stand-in summaries.
 - **Silica sand grading specification**
 - **ZEMA 3-year export permit:** reference number and file (currently shows "Document available on request")
 - **Division descriptions** (Diversified Interests): short stand-in copy

@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeaturedArticle from '../../components/FeaturedArticle.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import GallerySection from '../../components/GallerySection.astro';
+import { newsCategories, newsPage } from '../../data/site';
+import { categorySlug, getArticles, pickFeatured } from '../../lib/news';
+
+const articles = await getArticles();
+const featured = pickFeatured(articles);
+const rest = articles.filter((a) => a !== featured);
+const tabs = [
+  { id: 'all', label: newsPage.allLabel },
+  ...newsCategories.map((c) => ({ id: categorySlug(c), label: c })),
+];
+---
+
+<BaseLayout title={newsPage.pageTitle} description={newsPage.description}>
+  <PageHero eyebrow={newsPage.hero.eyebrow} title={newsPage.hero.title} />
+
+  <section class="section bg-ivory" aria-label={newsPage.pageTitle} data-news>
+    <div class="container-site">
+      <div role="group" aria-label={newsPage.filterLabel} class="-mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+        {
+          tabs.map((t, i) => (
+            <button type="button" class="filter-tab btn min-h-11 shrink-0 px-5" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={t.id}>
+              {t.label}
+            </button>
+          ))
+        }
+      </div>
+      <p class="sr-only" aria-live="polite" data-news-status></p>
+
+      {featured && <div class="mt-10" data-filterable><FeaturedArticle article={featured} /></div>}
+
+      <h2 class="sr-only">{newsPage.articlesHeading}</h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+        {rest.map((a) => <ArticleCard article={a} />)}
+      </div>
+      <p class="mt-10 text-muted" hidden data-news-empty>{newsPage.emptyState}</p>
+    </div>
+  </section>
+
+  <GallerySection />
+</BaseLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-news]');
+  if (root) {
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-category]'));
+    const status = root.querySelector<HTMLElement>('[data-news-status]')!;
+    const empty = root.querySelector<HTMLElement>('[data-news-empty]')!;
+
+    const apply = (filter: string, announce = true) => {
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+      let shown = 0;
+      items.forEach((el) => {
+        const show = filter === 'all' || el.dataset.category === filter;
+        // Hide the featured wrapper too, so the grid closes up
+        const target = el.closest<HTMLElement>('[data-filterable]') ?? el;
+        target.hidden = !show;
+        if (show) {
+          shown++;
+          el.classList.add('is-visible');
+        }
+      });
+      empty.hidden = shown > 0;
+      if (announce) status.textContent = `${shown} article${shown === 1 ? '' : 's'} shown`;
+    };
+
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      apply(b.dataset.filter!);
+      const url = new URL(location.href);
+      if (b.dataset.filter === 'all') url.searchParams.delete('category');
+      else url.searchParams.set('category', b.dataset.filter!);
+      history.replaceState(null, '', url);
+    }));
+
+    // Breadcrumb links arrive as /news/?category=compliance
+    const initial = new URLSearchParams(location.search).get('category');
+    if (initial && buttons.some((b) => b.dataset.filter === initial)) apply(initial, false);
+  }
+</script>

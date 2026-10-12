@@ -1,0 +1,117 @@
+---
+/** Share links for an article. Plain links; the only script is copy-link. */
+import Icon from './Icon.astro';
+import { articlePage } from '../data/site';
+
+interface Props {
+  title: string;
+  summary: string;
+  url: string;
+}
+const { title, summary, url } = Astro.props;
+const enc = encodeURIComponent;
+const t = articlePage.share;
+const links = [
+  { label: t.linkedin, icon: 'share-2', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`, external: true },
+  { label: t.whatsapp, icon: 'message-circle', href: `https://wa.me/?text=${enc(`${title} ${url}`)}`, external: true },
+  { label: t.email, icon: 'mail', href: `mailto:?subject=${enc(title)}&body=${enc(`${summary}\n\n${url}`)}`, external: false },
+] as const;
+---
+
+<div class="mt-16 border-t border-stone pt-8">
+  <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.18em] text-gold-700">{articlePage.shareHeading}</h2>
+  <ul class="mt-5 flex flex-wrap gap-x-8 gap-y-4">
+    {
+      links.map((l) => (
+        <li>
+          <a
+            href={l.href}
+            class="share-link"
+            target={l.external ? '_blank' : undefined}
+            rel={l.external ? 'noopener noreferrer' : undefined}
+          >
+            <Icon name={l.icon} size={20} class="text-gold-500" />
+            {l.label}
+          </a>
+        </li>
+      ))
+    }
+    <li>
+      <button type="button" class="share-link" data-copy-link={url} data-label-copy={t.copy} data-label-copied={t.copied}>
+        <span data-copy-icon><Icon name="link" size={20} class="text-gold-500" /></span>
+        <span data-copied-icon hidden><Icon name="check" size={20} class="text-gold-500" /></span>
+        <span data-copy-text>{t.copy}</span>
+      </button>
+      <span class="sr-only" aria-live="polite" data-copy-status></span>
+    </li>
+  </ul>
+</div>
+
+<style>
+  .share-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--color-green-600);
+    background-image: linear-gradient(var(--color-gold-500), var(--color-gold-500));
+    background-size: 0% 1px;
+    background-position: 0 calc(100% - 8px);
+    background-repeat: no-repeat;
+    transition: background-size 250ms ease;
+    cursor: pointer;
+  }
+  .share-link:hover,
+  .share-link:focus-visible {
+    background-size: 100% 1px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((btn) => {
+    const text = btn.querySelector<HTMLElement>('[data-copy-text]')!;
+    const copyIcon = btn.querySelector<HTMLElement>('[data-copy-icon]')!;
+    const copiedIcon = btn.querySelector<HTMLElement>('[data-copied-icon]')!;
+    const status = btn.parentElement?.querySelector<HTMLElement>('[data-copy-status]');
+    let timer: number | undefined;
+
+    const fallbackCopy = (value: string) => {
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    };
+
+    btn.addEventListener('click', async () => {
+      const value = btn.dataset.copyLink!;
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(value);
+        ok = true;
+      } catch {
+        ok = fallbackCopy(value);
+      }
+      if (!ok) return;
+      text.textContent = btn.dataset.labelCopied!;
+      copyIcon.hidden = true;
+      copiedIcon.hidden = false;
+      if (status) status.textContent = btn.dataset.labelCopied!;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        text.textContent = btn.dataset.labelCopy!;
+        copyIcon.hidden = false;
+        copiedIcon.hidden = true;
+        if (status) status.textContent = '';
+      }, 2000);
+    });
+  });
+</script>

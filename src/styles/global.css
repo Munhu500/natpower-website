@@ -337,6 +337,21 @@
   }
 
 
+  /* Filter tabs (Compliance library, News) */
+  .filter-tab {
+    border-color: var(--color-stone);
+    color: var(--color-ink);
+    background: var(--color-white);
+  }
+  .filter-tab:hover {
+    border-color: var(--color-green-600);
+  }
+  .filter-tab[aria-pressed='true'] {
+    background: var(--color-green-600);
+    border-color: var(--color-green-600);
+    color: var(--color-ivory);
+  }
+
   .form-field {
     display: block;
     width: 100%;
@@ -397,4 +412,75 @@
 /* Light panels inside dark regions (e.g. mega-menus) restore green focus rings */
 .on-light :focus-visible {
   outline-color: var(--color-green-600);
+}
+
+/* Article body typography, built from design tokens only */
+.article-prose {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-ink);
+}
+.article-prose > * + * {
+  margin-top: 1.25em;
+}
+.article-prose h2 {
+  margin-top: 2.5em;
+  font-size: clamp(1.375rem, 1.25rem + 0.4vw, 1.625rem);
+  color: var(--color-green-950);
+}
+.article-prose h2::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin-bottom: 18px;
+  background: var(--color-gold-500);
+}
+.article-prose h2 + * {
+  margin-top: 1em;
+}
+.article-prose h3 {
+  margin-top: 2em;
+  font-size: 1.25rem;
+}
+.article-prose ul,
+.article-prose ol {
+  padding-left: 1.25em;
+}
+.article-prose ul {
+  list-style: disc;
+}
+.article-prose ol {
+  list-style: decimal;
+}
+.article-prose li + li {
+  margin-top: 0.5em;
+}
+.article-prose li::marker {
+  color: var(--color-gold-500);
+}
+.article-prose blockquote {
+  border-left: 2px solid var(--color-gold-500);
+  padding-left: 1.25em;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25em;
+  line-height: 1.5;
+  color: var(--color-green-950);
+}
+.article-prose a {
+  color: var(--color-green-600);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  /* A faint underline keeps links distinguishable; it turns gold on hover */
+  text-decoration-color: rgb(20 90 40 / 0.35);
+  transition: text-decoration-color 250ms ease;
+}
+.article-prose a:hover,
+.article-prose a:focus-visible {
+  text-decoration-color: var(--color-gold-500);
+}
+.article-prose strong {
+  font-weight: 600;
 }

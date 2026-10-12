@@ -1,0 +1,111 @@
+---
+import { getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleMedia from '../../components/ArticleMedia.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import ShareRow from '../../components/ShareRow.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import { articlePage, seo } from '../../data/site';
+import { articleHref, categorySlug, formatDate, getArticles, isoDate, type Article } from '../../lib/news';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article, articles } }));
+}
+
+interface Props {
+  article: Article;
+  articles: Article[];
+}
+
+const { article, articles } = Astro.props;
+const { title, standfirst, date, location, category, image, imageAlt } = article.data;
+const { Content } = await render(article);
+const more = articles.filter((a) => a.id !== article.id).slice(0, 3);
+const url = new URL(articleHref(article), Astro.site).href;
+
+// og:image and JSON-LD image: the article photo when present, else the share card
+const shareCard = { url: new URL(seo.ogImage.src, Astro.site).href, width: seo.ogImage.width, height: seo.ogImage.height };
+let ogImage = { ...shareCard, alt: seo.ogImage.alt, type: 'image/jpeg' };
+if (image) {
+  const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpeg' });
+  ogImage = { url: new URL(og.src, Astro.site).href, width: 1200, height: 630, alt: imageAlt ?? title, type: 'image/jpeg' };
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: title,
+  description: standfirst,
+  datePublished: date.toISOString(),
+  dateModified: date.toISOString(),
+  image: [ogImage.url],
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  author: { '@type': 'Organization', name: articlePage.publisher },
+  publisher: {
+    '@type': 'Organization',
+    name: articlePage.publisher,
+    logo: { '@type': 'ImageObject', url: shareCard.url, width: shareCard.width, height: shareCard.height },
+  },
+};
+---
+
+<BaseLayout title={title} description={standfirst} ogType="article" publishedTime={date} ogImage={ogImage} jsonLd={jsonLd}>
+  <section class="on-dark relative flex min-h-[520px] items-end overflow-hidden bg-green-950 text-ivory md:min-h-[600px] lg:h-[72vh]">
+    <div class="absolute inset-0">
+      <ArticleMedia article={article} tone="dark" loading="eager" sizes="100vw" />
+    </div>
+    <div class="overlay-bottom absolute inset-0" aria-hidden="true"></div>
+    <div class="overlay-left absolute inset-0 opacity-70" aria-hidden="true"></div>
+    <div class="container-site relative pb-16 pt-40 md:pb-20">
+      <nav aria-label={articlePage.breadcrumbLabel}>
+        <ol class="flex flex-wrap items-center gap-2 text-[13px] text-ivory/70">
+          <li>
+            <a href={articlePage.breadcrumbRoot.href} class="transition-colors duration-[250ms] hover:text-ivory">{articlePage.breadcrumbRoot.label}</a>
+          </li>
+          <li aria-hidden="true"><Icon name="chevron-right" size={14} /></li>
+          <li>
+            <a href={`/news/?category=${categorySlug(category)}`} class="transition-colors duration-[250ms] hover:text-ivory">{category}</a>
+          </li>
+        </ol>
+      </nav>
+      <p class="eyebrow mt-8">{category}</p>
+      <h1 class="mt-6 max-w-5xl text-[clamp(2.25rem,1.4rem+3vw,4rem)]">{title}</h1>
+      <p class="mt-6 text-[15px] text-ivory/70">
+        <time datetime={isoDate(date)}>{formatDate(date)}</time>
+        <span aria-hidden="true" class="mx-1.5">·</span>
+        {location}
+      </p>
+    </div>
+  </section>
+
+  <article class="section bg-ivory">
+    <div class="container-site">
+      <div class="mx-auto max-w-[68ch]">
+        <p class="font-serif text-[clamp(1.375rem,1.3rem+0.3vw,1.5rem)] italic leading-[1.45] text-green-950">{standfirst}</p>
+        <div class="article-prose mt-10">
+          <Content />
+        </div>
+        <ShareRow title={title} summary={standfirst} url={url} />
+      </div>
+    </div>
+  </article>
+
+  {
+    more.length > 0 && (
+      <section class="section bg-white" aria-labelledby="more-heading">
+        <div class="container-site">
+          <p class="eyebrow">{articlePage.moreEyebrow}</p>
+          <h2 id="more-heading" class="text-h2 mt-6">{articlePage.moreHeading}</h2>
+          <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+            {more.map((a) => <ArticleCard article={a} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand background="white" />
+</BaseLayout>

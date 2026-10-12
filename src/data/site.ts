@@ -88,17 +88,6 @@ export interface DocumentItem {
   url: string | null;
 }
 
-export interface NewsItem {
-  id: string;
-  date: string;
-  location: string;
-  title: string;
-  excerpt: string;
-  /** Optional: announcements without a page or document are not linked. */
-  href?: string;
-  image: ImageRef;
-}
-
 export interface Division {
   id: string;
   title: string;
@@ -246,14 +235,14 @@ export const nav: NavItem[] = [
   { label: 'Investors', href: '/investors' },
   {
     label: 'News & Media',
-    href: '/news-media',
+    href: '/news/',
     children: [
-      { label: 'News', href: '/news-media#news', description: 'Announcements and milestones' },
-      { label: 'Gallery', href: '/news-media#gallery', description: 'Operations in pictures' },
+      { label: 'News & Insights', href: '/news/', description: 'Articles, announcements and milestones' },
+      { label: 'Media Gallery', href: '/news/#gallery', description: 'Operations in pictures' },
     ],
     featured: {
-      title: 'Natpower pursues LuSE listing',
-      href: '/investors',
+      title: 'Natpower pursues listing on the Lusaka Stock Exchange',
+      href: '/news/luse-listing/',
       image: { alt: 'Lusaka Stock Exchange', placeholderLabel: 'Photo: Lusaka skyline' },
     },
   },
@@ -267,7 +256,7 @@ export const sitemap: NavLink[] = [
   { label: 'Diversified Interests', href: '/diversified-interests' },
   { label: 'Compliance', href: '/compliance' },
   { label: 'Investors', href: '/investors' },
-  { label: 'News & Media', href: '/news-media' },
+  { label: 'News & Media', href: '/news/' },
   { label: 'Contact', href: '/contact' },
 ];
 
@@ -522,38 +511,10 @@ export const trustedBy = {
 // News & gallery
 // ---------------------------------------------------------------------------
 
-export const newsSection = { eyebrow: 'News & Media', heading: 'Latest from the group' };
+// Articles live in the `news` content collection (src/content/news/*.md).
+export const newsCategories = ['Company News', 'Compliance', 'Investors'] as const;
 
-/** Dates and locations are placeholders inferred from document upload dates. Confirm before launch. */
-export const news: NewsItem[] = [
-  {
-    id: 'acid-supply-partnership',
-    date: 'October 2026',
-    location: 'Kempton Park, South Africa',
-    title: 'Natpower Partners with Leading South African Mining House on Sulphuric Acid Supply',
-    excerpt:
-      'Natpower Industrial Corporation (Pty) Ltd has entered a toll-manufacturing partnership with a leading South African mining house. Natpower supplies sulphur and receives a share of the sulphuric acid produced, for supply to mining customers in Zambia, the DRC and Malawi.',
-    image: { alt: 'Sulphuric acid plant', placeholderLabel: 'Photo: sulphuric acid plant' },
-  },
-  {
-    id: 'luse',
-    date: 'July 2026',
-    location: 'Lusaka, Zambia',
-    title: 'Natpower pursues Lusaka Stock Exchange listing',
-    excerpt: 'Natpower Industrial Corporation Limited, our Zambian company, has published its LuSE listing and IPO investor prospectuses.',
-    href: '/investors',
-    image: { alt: 'Lusaka city centre', placeholderLabel: 'Photo: Lusaka / LuSE' },
-  },
-  {
-    id: 'itac',
-    date: 'July 2026',
-    location: 'Pretoria, South Africa',
-    title: 'ITAC export permit EXP2026/62348 renewed',
-    excerpt: 'The International Trade Administration Commission has renewed the group’s sulphuric acid export permit.',
-    href: '/compliance',
-    image: { alt: 'Export documentation', placeholderLabel: 'Photo: tanker at border post' },
-  },
-];
+export const newsSection = { eyebrow: 'News & Media', heading: 'Latest from the group' };
 
 /** TODO: replace with captions from the old natpower.org gallery (site unreachable during build). */
 export const gallery: GalleryItem[] = [
@@ -720,13 +681,44 @@ export const investorsPage = {
 };
 
 export const newsPage = {
-  hero: {
-    eyebrow: 'News & Media',
-    title: 'News & media',
-    image: { alt: 'Natpower operations', placeholderLabel: 'Page hero: operations' } as ImageRef,
+  pageTitle: 'News & Insights',
+  description: 'News, announcements and insights from the Natpower Group.',
+  hero: { eyebrow: 'News & Insights', title: 'Latest from Natpower' },
+  featuredLabel: 'Featured article',
+  readArticle: 'Read article',
+  filterLabel: 'Filter articles by category',
+  allLabel: 'All',
+  articlesHeading: 'All articles',
+  emptyState: 'No articles in this category yet.',
+  gallery: { eyebrow: 'Gallery', heading: 'Media gallery' },
+};
+
+export const articlePage = {
+  breadcrumbRoot: { label: 'News & Insights', href: '/news/' },
+  breadcrumbLabel: 'Breadcrumb',
+  shareHeading: 'Share this article',
+  share: {
+    linkedin: 'LinkedIn',
+    whatsapp: 'WhatsApp',
+    email: 'Email',
+    copy: 'Copy link',
+    copied: 'Copied',
   },
-  news: { eyebrow: 'News', heading: 'Announcements' },
-  gallery: { eyebrow: 'Gallery', heading: 'Operations in pictures' },
+  moreHeading: 'More from Natpower',
+  moreEyebrow: 'News & Insights',
+  publisher: 'Natpower Group',
+};
+
+/**
+ * Labels for the stone placeholders shown until an article has an `image`.
+ * Adding a photo later: put it next to the .md file and add one line to the
+ * frontmatter, e.g. `image: ./images/partnership.jpg`.
+ */
+export const articleImagePlaceholders: Record<string, string> = {
+  'mining-house-partnership': 'Acid production plant or tanker loading at source',
+  'luse-listing': 'Lusaka skyline or corporate office',
+  'itac-export-permits': 'Bulk acid tanker on the road / border crossing',
+  'zamra-import-permit': 'Warehouse with acid floor bins and sulphur bags',
 };
 
 export const contactPage = {
